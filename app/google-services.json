@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "510744270810",
+    "project_id": "xtracontacts-b6231",
+    "storage_bucket": "xtracontacts-b6231.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:510744270810:android:6e2d57d5ecee9839c612e3",
+        "android_client_info": {
+          "package_name": "com.surajverma.xtracontacts"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWGI4-SOaB39bw3ySJDF-I-WoRQKsR2DA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
