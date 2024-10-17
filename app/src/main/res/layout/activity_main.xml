@@ -31,14 +31,11 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/white"
         android:indeterminate="true"
-        android:layout_marginTop="150dp"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
-
-
-
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
