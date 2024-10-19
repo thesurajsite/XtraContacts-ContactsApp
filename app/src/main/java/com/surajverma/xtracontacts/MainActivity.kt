@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() {
 
         })
 
+        // FETCH CONTACTS
         contactViewModel.fetchAllContacts(this)
 
     }
