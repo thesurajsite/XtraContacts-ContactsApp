@@ -60,4 +60,8 @@ dependencies {
     implementation ("com.google.firebase:firebase-auth:19.3.2")
     implementation("com.google.firebase:firebase-firestore:25.1.0")
 
+    // in-app update
+    implementation("com.google.android.play:app-update:2.1.0")
+    implementation("com.google.android.play:app-update-ktx:2.1.0")
+
 }
