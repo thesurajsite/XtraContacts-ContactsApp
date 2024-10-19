@@ -55,9 +55,9 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     // viewmodel
-    implementation (libs.androidx.lifecycle.viewmodel.ktx)
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
     // FireStore
-    implementation(libs.firebase.auth)
+    implementation ("com.google.firebase:firebase-auth:19.3.2")
     implementation("com.google.firebase:firebase-firestore:25.1.0")
 
 }

@@ -47,7 +47,7 @@ class ContactViewModel: ViewModel() {
         val reference = db.collection("CONTACTS").document(USER_ID).collection("USER_CONTACTS")
         reference.orderBy("name", Query.Direction.DESCENDING).get()
             .addOnSuccessListener {
-                Toast.makeText(activity, "Contacts Fetched", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(activity, "Contacts Fetched", Toast.LENGTH_SHORT).show()
 
                 val contactList = mutableListOf<ContactsModel>()
 
@@ -91,5 +91,24 @@ class ContactViewModel: ViewModel() {
 
     }
 
+    fun deleteContact(contactID: String, activity: Activity){
+        auth=FirebaseAuth.getInstance()
+        val USER_ID= auth.currentUser?.uid.toString()
+        val CONTACT_ID = contactID  //  Assign ID to each Contact
+
+        db.collection("CONTACTS").document(USER_ID).collection("USER_CONTACTS").document(CONTACT_ID).delete()
+            .addOnSuccessListener {
+                Toast.makeText(activity, "Contact Deleted", Toast.LENGTH_SHORT).show()
+
+                val intent =  Intent(activity, MainActivity::class.java)
+                activity.startActivity(intent)
+                activity.finish()
+
+            }
+            .addOnFailureListener {
+                Toast.makeText(activity, "Some error occured Deleting contact", Toast.LENGTH_SHORT).show()
+            }
+
+    }
 
 }

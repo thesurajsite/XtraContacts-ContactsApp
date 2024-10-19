@@ -1,5 +1,6 @@
 package com.surajverma.xtracontacts
 
+import android.app.Activity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -47,6 +48,11 @@ class UpdateContactActivity : AppCompatActivity() {
 
             val contactDetails =  ContactsModel(id, name, number, email, instagram, x, linkedin)
             contactViewModel.updateContact(contactDetails, this)
+        }
+
+        binding.deleteButton.setOnClickListener {
+            val id = intent.getStringExtra("id")
+            contactViewModel.deleteContact(id!!, this)
         }
 
     }
