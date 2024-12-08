@@ -236,5 +236,6 @@ class RecyclerContactAdapter(
         } else {
             holder.linkedinButton.visibility = View.VISIBLE
         }
+
     }
 }
