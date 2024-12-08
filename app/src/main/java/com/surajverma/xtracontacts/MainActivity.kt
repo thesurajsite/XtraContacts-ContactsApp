@@ -83,7 +83,15 @@ class MainActivity : AppCompatActivity() {
         contactViewModel.fetchAllContacts(this)
 
 
+        binding.profileButton.setOnClickListener {
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
+        }
+
+
     }
+
+
 
     private val installStateUpdateListener= InstallStateUpdatedListener{ state->
         if(state.installStatus()== InstallStatus.DOWNLOADED){
