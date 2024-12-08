@@ -1,8 +1,10 @@
 package com.surajverma.xtracontacts
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Vibrator
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -18,6 +20,7 @@ import com.surajverma.xtracontacts.databinding.ActivitySignupBinding
 class SignupActivity : AppCompatActivity() {
 
     lateinit var auth: FirebaseAuth
+    private lateinit var vibrator: Vibrator
     private lateinit var authViewModel: AuthViewModel
     private lateinit var binding: ActivitySignupBinding
 
@@ -33,16 +36,17 @@ class SignupActivity : AppCompatActivity() {
         val emailEditText=findViewById<EditText>(R.id.emailEditText)
         val passwordEditText=findViewById<EditText>(R.id.passwordEditText)
         val confirmPasswordEditText=findViewById<EditText>(R.id.confirmPasswordEditText)
-        val createAccountButton=findViewById<Button>(R.id.createAccountButton)
-        val loginText=findViewById<TextView>(R.id.loginText)
+        vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
-        loginText.setOnClickListener {
+        binding.loginText.setOnClickListener {
+            vibrator.vibrate(50)
             val intent= Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
         }
 
-        createAccountButton.setOnClickListener {
+        binding.createAccountButton.setOnClickListener {
+            vibrator.vibrate(50)
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
             val confirmPassword = confirmPasswordEditText.text.toString()
@@ -57,7 +61,8 @@ class SignupActivity : AppCompatActivity() {
         }
 
         binding.googleCardView.setOnClickListener {
-
+            vibrator.vibrate(50)
+            Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show()
         }
 
 

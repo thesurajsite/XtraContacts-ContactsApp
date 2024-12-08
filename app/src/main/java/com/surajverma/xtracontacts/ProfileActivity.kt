@@ -1,7 +1,9 @@
 package com.surajverma.xtracontacts
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Vibrator
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -13,6 +15,7 @@ class ProfileActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityProfileBinding
     private lateinit var auth: FirebaseAuth
+    private lateinit var vibrator: Vibrator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,8 +24,10 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         auth = FirebaseAuth.getInstance()
+        vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
         binding.logoutButton.setOnClickListener {
+            vibrator.vibrate(50)
             auth.signOut()
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)

@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +33,7 @@ class RecyclerContactAdapter(
         var instagramButton: ImageView = itemView.findViewById(R.id.instagramButton)
         var xButton: ImageView = itemView.findViewById(R.id.XButton)
         var linkedinButton: ImageView = itemView.findViewById(R.id.linkedinButton)
+        val vibrator = itemView.context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -51,6 +53,7 @@ class RecyclerContactAdapter(
 
         val arr = IntArray(1) { 0 }
         holder.cardView.setOnClickListener {
+            holder.vibrator.vibrate(50)
             arr[0] = if (arr[0] == 0) {
                 holder.linear.visibility = View.VISIBLE
                 1
@@ -61,6 +64,7 @@ class RecyclerContactAdapter(
         }
 
         holder.editButton.setOnClickListener {
+            holder.vibrator.vibrate(50)
             val intent = Intent(context, UpdateContactActivity::class.java)
             intent.putExtra("id", arrContacts[position].id)
             intent.putExtra("name", arrContacts[position].name)
@@ -73,6 +77,7 @@ class RecyclerContactAdapter(
         }
 
         holder.callButton.setOnClickListener {
+            holder.vibrator.vibrate(50)
             if (arrContacts[position].number!!.isNotEmpty()) {
                 Toast.makeText(context, "Calling ${arrContacts[position].name}", Toast.LENGTH_SHORT).show()
                 val callintent = Intent(Intent.ACTION_DIAL)
@@ -82,6 +87,7 @@ class RecyclerContactAdapter(
         }
 
         holder.whatsappButton.setOnClickListener {
+            holder.vibrator.vibrate(50)
             val userNumberWithSpaces = arrContacts[position].number!! // The Phone Number May have spaces
             val userNumberWithoutSpaces = userNumberWithSpaces.filterNot { it.isWhitespace() || it == '+' } // To store Number Without Spaces
             val length = userNumberWithoutSpaces.length // length of filtered phone number
@@ -101,6 +107,7 @@ class RecyclerContactAdapter(
         }
 
         holder.emailButton.setOnClickListener {
+            holder.vibrator.vibrate(50)
             val emailID = arrContacts[position].email
             if (emailID!!.isNotEmpty()) {
                 Toast.makeText(context, "Opening Email app for $emailID", Toast.LENGTH_SHORT).show()
@@ -121,6 +128,7 @@ class RecyclerContactAdapter(
 
 
         holder.instagramButton.setOnClickListener {
+            holder.vibrator.vibrate(50)
             var instaID = arrContacts[position].instagram
             if (instaID!!.isNotEmpty()) {
                 if (instaID[0] == '@') {
@@ -145,6 +153,7 @@ class RecyclerContactAdapter(
         }
 
         holder.xButton.setOnClickListener {
+            holder.vibrator.vibrate(50)
             var xID = arrContacts[position].x
             if (xID!!.isNotEmpty()) {
                 if (xID[0] == '@') {
@@ -169,6 +178,7 @@ class RecyclerContactAdapter(
         }
 
         holder.linkedinButton.setOnClickListener {
+            holder.vibrator.vibrate(50)
             var linkedinID = arrContacts[position].linkedin
             if (linkedinID!!.isNotEmpty()) {
                 if (linkedinID[0] == '@') {

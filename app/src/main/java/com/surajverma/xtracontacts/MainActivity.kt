@@ -1,7 +1,9 @@
 package com.surajverma.xtracontacts
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Vibrator
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -31,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var authViewModel: AuthViewModel
     private lateinit var contactViewModel: ContactViewModel
     lateinit var arrContact: ArrayList<ContactsModel>
+    private lateinit var vibrator: Vibrator
 
     private lateinit var appUpdateManager: AppUpdateManager
     private val updateType= AppUpdateType.FLEXIBLE
@@ -53,6 +56,7 @@ class MainActivity : AppCompatActivity() {
         auth=FirebaseAuth.getInstance()
         authViewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
         contactViewModel= ViewModelProvider(this).get(ContactViewModel::class.java)
+        vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
         // Check Login
         authViewModel.checkLogin(this)
@@ -65,6 +69,7 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.adapter = recyclerAdapter
 
         binding.floatingActionButton.setOnClickListener {
+            vibrator.vibrate(50)
             val intent = Intent(this, AddContactActivity::class.java)
             startActivity(intent)
         }
@@ -84,6 +89,7 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.profileButton.setOnClickListener {
+            vibrator.vibrate(50)
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
         }
