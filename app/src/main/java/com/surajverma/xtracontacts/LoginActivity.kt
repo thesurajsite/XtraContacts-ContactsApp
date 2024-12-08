@@ -13,16 +13,19 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.surajverma.xtracontacts.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
 
     lateinit var auth: FirebaseAuth
     private lateinit var authViewModel: AuthViewModel
+    private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_login)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         auth=FirebaseAuth.getInstance()
         authViewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
@@ -32,13 +35,13 @@ class LoginActivity : AppCompatActivity() {
         val loginButton=findViewById<Button>(R.id.loginButton)
         val createAccountText=findViewById<TextView>(R.id.createAccountText)
 
-        createAccountText.setOnClickListener {
+        binding.createAccountText.setOnClickListener {
             val intent= Intent(this, SignupActivity::class.java)
             startActivity(intent)
             finish()
         }
 
-        loginButton.setOnClickListener {
+        binding.loginButton.setOnClickListener {
             val email=emailEditText.text.toString()
             val password=passwordEditText.text.toString()
 
@@ -48,6 +51,10 @@ class LoginActivity : AppCompatActivity() {
             else{
                 Toast.makeText(this, "Fill All Details", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        binding.googleCardView.setOnClickListener {
+
         }
 
 

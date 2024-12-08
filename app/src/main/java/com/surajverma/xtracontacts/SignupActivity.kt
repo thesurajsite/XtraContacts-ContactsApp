@@ -13,16 +13,19 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.surajverma.xtracontacts.databinding.ActivitySignupBinding
 
 class SignupActivity : AppCompatActivity() {
 
     lateinit var auth: FirebaseAuth
     private lateinit var authViewModel: AuthViewModel
+    private lateinit var binding: ActivitySignupBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_signup)
+        binding = ActivitySignupBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         auth=FirebaseAuth.getInstance()
         authViewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
@@ -50,6 +53,10 @@ class SignupActivity : AppCompatActivity() {
             else{
                 Toast.makeText(this, "Fill All Details", Toast.LENGTH_SHORT).show()
             }
+
+        }
+
+        binding.googleCardView.setOnClickListener {
 
         }
 

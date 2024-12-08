@@ -10,6 +10,7 @@
     tools:context=".LoginActivity">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="350dp"
         android:layout_height="400dp"
         android:backgroundTint="#FFFFFF"
@@ -94,10 +95,28 @@
         android:text="Don't have an Account? Signup Here"
         android:textColor="#FFFFFF"
         android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.848" />
+        app:layout_constraintTop_toBottomOf="@id/cardView"
+        android:layout_marginTop="20dp"/>
+
+    <androidx.cardview.widget.CardView
+      android:id="@+id/googleCardView"
+      android:layout_width="50dp"
+      android:layout_height="50dp"
+      app:cardCornerRadius="100dp"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/createAccountText"
+      android:layout_marginTop="30dp"
+      android:backgroundTint="@color/white">
+
+        <ImageView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:src="@drawable/google"
+          android:padding="10dp"/>
+
+    </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
