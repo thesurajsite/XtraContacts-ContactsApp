@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Vibrator
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -14,7 +15,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.surajverma.xtracontacts.databinding.ActivitySignupBinding
 
 class SignupActivity : AppCompatActivity() {
@@ -37,6 +42,13 @@ class SignupActivity : AppCompatActivity() {
         val passwordEditText=findViewById<EditText>(R.id.passwordEditText)
         val confirmPasswordEditText=findViewById<EditText>(R.id.confirmPasswordEditText)
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.web_client_id))
+            .requestEmail()
+            .build()
+
+        val googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         binding.loginText.setOnClickListener {
             vibrator.vibrate(50)
@@ -62,9 +74,38 @@ class SignupActivity : AppCompatActivity() {
 
         binding.googleCardView.setOnClickListener {
             vibrator.vibrate(50)
-            Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show()
+            googleSignInClient.signOut()
+            startActivityForResult(googleSignInClient.signInIntent, 123)
         }
 
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 123 && resultCode ==  RESULT_OK) {
+            Log.d("XtraContacts", "onActivityResult")
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            val account = task.getResult(ApiException::class.java)
+            firebaseAuthWithGoogle(account.idToken!!)
+
+        }
+    }
+
+    private fun firebaseAuthWithGoogle(idToken: String) {
+        val credential = GoogleAuthProvider.getCredential(idToken, /*accessToken=*/ null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(this, "Signed in Successfully", Toast.LENGTH_LONG).show()
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Some Error Occured", Toast.LENGTH_LONG).show()
+                Log.d("XtraContacts", it.localizedMessage!!)
+            }
     }
 }

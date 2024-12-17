@@ -14,8 +14,8 @@ android {
         applicationId = "com.surajverma.xtracontacts"
         minSdk = 26
         targetSdk = 34
-        versionCode = 2
-        versionName = "1.0.1"
+        versionCode = 3
+        versionName = "1.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -55,10 +55,11 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     // viewmodel
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
     // FireStore
-    implementation ("com.google.firebase:firebase-auth:19.3.2")
-    implementation("com.google.firebase:firebase-firestore:25.1.0")
+    implementation ("com.google.firebase:firebase-auth:23.1.0")
+    implementation("com.google.firebase:firebase-firestore:25.1.1")
+    implementation(libs.play.services.auth)
 
     // in-app update
     implementation("com.google.android.play:app-update:2.1.0")
