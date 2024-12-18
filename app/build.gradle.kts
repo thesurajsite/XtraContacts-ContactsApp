@@ -3,7 +3,8 @@ import org.jetbrains.kotlin.storage.CacheResetOnProcessCanceled.enabled
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
-    alias(libs.plugins.google.gms.google.services)
+   // alias(libs.plugins.google.gms.google.services)
+    id ("com.google.gms.google-services")
 }
 
 android {
@@ -14,8 +15,8 @@ android {
         applicationId = "com.surajverma.xtracontacts"
         minSdk = 26
         targetSdk = 34
-        versionCode = 3
-        versionName = "1.0.2"
+        versionCode = 4
+        versionName = "1.0.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -57,9 +58,11 @@ dependencies {
     // viewmodel
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
     // FireStore
-    implementation ("com.google.firebase:firebase-auth:23.1.0")
+    implementation ("com.google.firebase:firebase-auth:23.0.0")
+    implementation ("com.google.firebase:firebase-core:21.1.1")
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("com.google.firebase:firebase-firestore:25.1.1")
-    implementation(libs.play.services.auth)
+    implementation("com.google.android.gms:play-services-auth:21.3.0")
 
     // in-app update
     implementation("com.google.android.play:app-update:2.1.0")
