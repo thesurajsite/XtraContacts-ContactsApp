@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "510744270810",
     "project_id": "xtracontacts-b6231",
-    "storage_bucket": "xtracontacts-b6231.appspot.com"
+    "storage_bucket": "xtracontacts-b6231.firebasestorage.app"
   },
   "client": [
     {
@@ -12,7 +12,20 @@
           "package_name": "com.surajverma.xtracontacts"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "510744270810-239sg7rp4o3eghn6pcgi3btfaer4eiuq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.surajverma.xtracontacts",
+            "certificate_hash": "55802cb7c0b10b3ac752abc228774dae760cafc7"
+          }
+        },
+        {
+          "client_id": "510744270810-g5rskphj5dcddoft4gdnfug6dbtr22a5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDWGI4-SOaB39bw3ySJDF-I-WoRQKsR2DA"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "510744270810-g5rskphj5dcddoft4gdnfug6dbtr22a5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
