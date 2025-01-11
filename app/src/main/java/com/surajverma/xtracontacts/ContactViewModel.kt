@@ -45,7 +45,7 @@ class ContactViewModel: ViewModel() {
         val USER_ID= auth.currentUser?.uid.toString()
 
         val reference = db.collection("CONTACTS").document(USER_ID).collection("USER_CONTACTS")
-        reference.orderBy("name", Query.Direction.DESCENDING).get()
+        reference.orderBy("name", Query.Direction.ASCENDING).get()
             .addOnSuccessListener {
                 //Toast.makeText(activity, "Contacts Fetched", Toast.LENGTH_SHORT).show()
 
