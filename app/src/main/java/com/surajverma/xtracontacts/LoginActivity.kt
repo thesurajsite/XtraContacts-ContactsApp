@@ -86,7 +86,6 @@ class LoginActivity : AppCompatActivity() {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             val account = task.getResult(ApiException::class.java)
             firebaseAuthWithGoogle(account.idToken!!)
-
         }
     }
 

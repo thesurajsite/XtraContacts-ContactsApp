@@ -21,6 +21,7 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
 import com.google.android.play.core.ktx.isImmediateUpdateAllowed
 import com.google.firebase.auth.FirebaseAuth
+import com.surajverma.xtracontacts.ContactPage.ContactPageActivity
 import com.surajverma.xtracontacts.databinding.ActivityMainBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -91,6 +92,12 @@ class MainActivity : AppCompatActivity() {
         binding.profileButton.setOnClickListener {
             vibrator.vibrate(50)
             val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.contactPageButton.setOnClickListener {
+            vibrator.vibrate(50)
+            val intent = Intent(this, ContactPageActivity::class.java)
             startActivity(intent)
         }
 

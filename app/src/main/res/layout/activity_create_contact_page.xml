@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/main"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:context=".ContactPage.CreateContactPageActivity">
+
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <TextView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="Create New Contacts Page"
+      android:textColor="@color/white"
+      android:textSize="20sp"
+      />
+
+    <EditText
+      android:id="@+id/contactsPageName"
+      android:layout_width="match_parent"
+      android:layout_height="50dp"
+      android:hint="Enter Page Name"
+      android:textColor="@color/black"
+      android:background="@drawable/custom_input"
+      android:layout_marginHorizontal="20dp"
+      android:layout_marginTop="20dp"
+      android:paddingLeft="20dp"/>
+
+    <Button
+      android:id="@+id/createContactsPageButton"
+      android:layout_width="200dp"
+      android:layout_height="50dp"
+      android:backgroundTint="@color/white"
+      android:layout_marginTop="20dp"
+      android:text="Create Page"
+      android:textColor="@color/black"/>
+
+  </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
