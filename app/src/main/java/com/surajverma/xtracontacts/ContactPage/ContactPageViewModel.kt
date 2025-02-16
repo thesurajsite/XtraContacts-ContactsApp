@@ -22,6 +22,9 @@ class ContactPageViewModel: ViewModel() {
     private val _contactPages = MutableLiveData<List<ContactPageDetailsModel>>()
     val contactPages: LiveData<List<ContactPageDetailsModel>> get() = _contactPages
 
+    private val _contacts = MutableLiveData<List<ContactsModel>>()
+    val contacts: LiveData<List<ContactsModel>> get() = _contacts
+
     fun createContactsPage(pageName: String, ownerId: String, activity: Activity){
         val pageId = db.collection("CONTACT_PAGE").document().id
         val pageDetails = ContactPageDetailsModel(pageName, pageId, ownerId)
@@ -51,7 +54,6 @@ class ContactPageViewModel: ViewModel() {
 
 
     fun fetchMyContactPages(userId: String, activity: Activity){
-
         db.collection("MY_CONTACT_PAGES").document(userId).collection("CONTACT_PAGES").get()
             .addOnSuccessListener {
 
@@ -71,6 +73,58 @@ class ContactPageViewModel: ViewModel() {
             }
             .addOnFailureListener {
                 Toast.makeText(activity, "Some error occured fetching pages", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    fun createContacts(contactDetails: ContactsModel,pageName: String, pageId: String, ownerId: String, userId: String, activity: Activity){
+
+        if(ownerId == userId){
+
+            val contactId = db.collection("CONTACT_PAGE").document(pageId).collection("PAGE_CONTACTS").document().id
+            db.collection("CONTACT_PAGE").document(pageId).collection("PAGE_CONTACTS").document(contactId).set(contactDetails)
+                .addOnSuccessListener {
+                    Toast.makeText(activity, "Contact Created", Toast.LENGTH_SHORT).show()
+                    val intent =  Intent(activity, AllContactsActivity::class.java)
+                    intent.putExtra("pageName", pageName)
+                    intent.putExtra("pageID", pageId)
+                    intent.putExtra("ownerId", ownerId)
+                    activity.startActivity(intent)
+                    activity.finish()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(activity, "Some error Occured", Toast.LENGTH_SHORT).show()
+                }
+        }
+
+    }
+
+    fun fetchPageContacts(pageId: String, activity: Activity){
+
+        val contactList = mutableListOf<ContactsModel>()
+
+        db.collection("CONTACT_PAGE").document(pageId).collection("PAGE_CONTACTS")
+            .orderBy("name", Query.Direction.ASCENDING).get()
+            .addOnSuccessListener {
+                Toast.makeText(activity, "Contacts Fetched", Toast.LENGTH_SHORT).show()
+
+                for (document in it.documents) {
+                    val id = document.getString("id") ?: ""
+                    val name = document.getString("name") ?: ""
+                    val number = document.getString("number") ?: ""
+                    val email = document.getString("email") ?: ""
+                    val instagram = document.getString("instagram") ?: ""
+                    val x = document.getString("x") ?: ""
+                    val linkedin = document.getString("linkedin") ?: ""
+
+                    contactList.add(ContactsModel(id, name, number, email, instagram, x, linkedin))
+
+                }
+
+                _contacts.value=contactList
+
+            }
+            .addOnFailureListener {
+                Toast.makeText(activity, "Some Error Occured", Toast.LENGTH_SHORT).show()
             }
     }
 
