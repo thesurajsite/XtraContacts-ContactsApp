@@ -141,10 +141,10 @@ class ContactPageViewModel: ViewModel() {
                     val ownerId = document.getString("ownerId") ?: ""
                     val pageId = document.getString("pageId") ?: ""
 
-                    val contactDetails = ContactPageDetailsModel(pageName, pageId, ownerId)
+                    val contactPageDetails = ContactPageDetailsModel(pageName, pageId, ownerId)
 
                     // Add Page to My Contact Pages
-                    db.collection("MY_CONTACT_PAGES").document(userId).collection("CONTACT_PAGES").document(pageId).set(contactDetails)
+                    db.collection("MY_CONTACT_PAGES").document(userId).collection("CONTACT_PAGES").document(pageId).set(contactPageDetails)
                         .addOnSuccessListener {
                             Toast.makeText(activity, "Page Added", Toast.LENGTH_SHORT).show()
                             val intent = Intent(activity, ContactPageActivity::class.java)
