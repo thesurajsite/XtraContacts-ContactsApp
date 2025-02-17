@@ -18,7 +18,9 @@ import java.util.ArrayList
 
 class RecyclerContactAdapter(
     private val context: Context,
-    private val arrContacts: ArrayList<ContactsModel>
+    private val arrContacts: ArrayList<ContactsModel>,
+    private val isContactPage: Boolean,
+    private val ownerId: String
 ): RecyclerView.Adapter<RecyclerContactAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -73,6 +75,8 @@ class RecyclerContactAdapter(
             intent.putExtra("instagram", arrContacts[position].instagram)
             intent.putExtra("x", arrContacts[position].x)
             intent.putExtra("linkedin", arrContacts[position].linkedin)
+            intent.putExtra("isContactPage", isContactPage)
+            intent.putExtra("ownerId", ownerId)
             context.startActivity(intent)
         }
 

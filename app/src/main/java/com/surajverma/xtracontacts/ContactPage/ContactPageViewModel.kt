@@ -82,6 +82,7 @@ class ContactPageViewModel: ViewModel() {
         if(ownerId == userId){
 
             val contactId = db.collection("CONTACT_PAGE").document(pageId).collection("PAGE_CONTACTS").document().id
+            contactDetails.id= contactId
             db.collection("CONTACT_PAGE").document(pageId).collection("PAGE_CONTACTS").document(contactId).set(contactDetails)
                 .addOnSuccessListener {
                     Toast.makeText(activity, "Contact Created", Toast.LENGTH_SHORT).show()

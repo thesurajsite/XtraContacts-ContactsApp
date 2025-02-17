@@ -2,6 +2,7 @@ package com.surajverma.xtracontacts
 
 import android.app.Activity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +30,7 @@ class UpdateContactActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         auth=FirebaseAuth.getInstance()
+        val userId = auth.currentUser?.uid.toString()
         contactViewModel = ViewModelProvider(this).get(ContactViewModel::class.java)
 
         binding.nameeditText.setText(intent.getStringExtra("name"))
@@ -37,6 +39,8 @@ class UpdateContactActivity : AppCompatActivity() {
         binding.instagramEditText.setText(intent.getStringExtra("instagram"))
         binding.XEditText.setText(intent.getStringExtra("x"))
         binding.linkedEditText.setText(intent.getStringExtra("linkedin"))
+        val isContactPage = intent.getBooleanExtra("isContactPage", false)
+        val ownerId = intent.getStringExtra("ownerId")
 
         // Setting Drawable start image to EditText
         val nameLogo = ContextCompat.getDrawable(this, R.drawable.name_logo)
@@ -77,10 +81,27 @@ class UpdateContactActivity : AppCompatActivity() {
             contactViewModel.updateContact(contactDetails, this)
         }
 
-        binding.deleteButton.setOnClickListener {
-            val id = intent.getStringExtra("id")
-            contactViewModel.deleteContact(id!!, this)
+
+
+        if(isContactPage && userId == ownerId){
+            binding.deleteButton.visibility = View.VISIBLE
+            binding.deleteButton.setOnClickListener {
+                Toast.makeText(this, "Dont Delete", Toast.LENGTH_SHORT).show()
+            }
         }
+        else if(isContactPage && userId != ownerId){
+            binding.deleteButton.visibility = View.GONE
+        }
+        else{  // Not Contact Page
+            binding.deleteButton.setOnClickListener {
+                val id = intent.getStringExtra("id")
+                contactViewModel.deleteContact(id!!, this)
+            }
+        }
+
+        // If Contact Page, Hide Save Button
+        if(isContactPage) binding.saveButton.visibility = View.GONE
+
 
     }
 }

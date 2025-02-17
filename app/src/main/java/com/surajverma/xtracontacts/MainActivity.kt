@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager= LinearLayoutManager(this)
         binding.recyclerView.setHasFixedSize(true)
         arrContact= ArrayList<ContactsModel>()
-        val recyclerAdapter= RecyclerContactAdapter(this, arrContact)
+        val recyclerAdapter= RecyclerContactAdapter(this, arrContact, false, "nothing")
         binding.recyclerView.adapter = recyclerAdapter
 
         binding.floatingActionButton.setOnClickListener {
