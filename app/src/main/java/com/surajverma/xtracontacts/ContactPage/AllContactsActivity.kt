@@ -82,7 +82,6 @@ class AllContactsActivity : AppCompatActivity() {
     fun copyPageId(context: Context, text: String) {
         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
         clipboard?.setPrimaryClip(ClipData.newPlainText("Copy Page ID", text))
-        Toast.makeText(context, "Copied to clipboard", Toast.LENGTH_SHORT).show()
     }
 
 

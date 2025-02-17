@@ -2,6 +2,7 @@ package com.surajverma.xtracontacts.ContactPage
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Vibrator
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -27,6 +28,7 @@ class ContactPageActivity : AppCompatActivity() {
         auth= FirebaseAuth.getInstance()
         val userId=auth.currentUser?.uid.toString()
         viewModel= ViewModelProvider(this).get(ContactPageViewModel::class.java)
+        val vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
 
         binding.recyclerView.layoutManager= LinearLayoutManager(this)
         binding.recyclerView.setHasFixedSize(true)
@@ -41,7 +43,8 @@ class ContactPageActivity : AppCompatActivity() {
             recyclerAdapter.notifyDataSetChanged()
         })
 
-        binding.createContactPageButton.setOnClickListener {
+        binding.floatingActionButton.setOnClickListener {
+            vibrator.vibrate(50)
             val intent = Intent(this, CreateContactPageActivity::class.java)
             startActivity(intent)
         }

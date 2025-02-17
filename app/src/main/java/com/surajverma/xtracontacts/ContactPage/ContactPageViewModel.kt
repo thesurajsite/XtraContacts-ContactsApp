@@ -54,7 +54,8 @@ class ContactPageViewModel: ViewModel() {
 
 
     fun fetchMyContactPages(userId: String, activity: Activity){
-        db.collection("MY_CONTACT_PAGES").document(userId).collection("CONTACT_PAGES").get()
+        db.collection("MY_CONTACT_PAGES").document(userId).collection("CONTACT_PAGES")
+            .orderBy("pageName", Query.Direction.ASCENDING).get()
             .addOnSuccessListener {
 
                 val contactPageList = mutableListOf<ContactPageDetailsModel>()
@@ -105,7 +106,7 @@ class ContactPageViewModel: ViewModel() {
         db.collection("CONTACT_PAGE").document(pageId).collection("PAGE_CONTACTS")
             .orderBy("name", Query.Direction.ASCENDING).get()
             .addOnSuccessListener {
-                Toast.makeText(activity, "Contacts Fetched", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(activity, "Contacts Fetched", Toast.LENGTH_SHORT).show()
 
                 for (document in it.documents) {
                     val id = document.getString("id") ?: ""
@@ -126,6 +127,45 @@ class ContactPageViewModel: ViewModel() {
             .addOnFailureListener {
                 Toast.makeText(activity, "Some Error Occured", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    fun addContactPage(pageId: String, userId: String ,activity: Activity){
+        db.collection("CONTACT_PAGE").document(pageId).collection("PAGE_DETAILS").document("PAGE_DETAILS").get()
+            .addOnSuccessListener { document->
+
+                if (document.exists()) {
+                    Toast.makeText(activity, "Page Found", Toast.LENGTH_SHORT).show()
+
+                    val pageName = document.getString("pageName") ?: ""
+                    val ownerId = document.getString("ownerId") ?: ""
+                    val pageId = document.getString("pageId") ?: ""
+
+                    val contactDetails = ContactPageDetailsModel(pageName, pageId, ownerId)
+
+                    // Add Page to My Contact Pages
+                    db.collection("MY_CONTACT_PAGES").document(userId).collection("CONTACT_PAGES").document(pageId).set(contactDetails)
+                        .addOnSuccessListener {
+                            Toast.makeText(activity, "Page Added", Toast.LENGTH_SHORT).show()
+                            val intent = Intent(activity, ContactPageActivity::class.java)
+                            activity.startActivity(intent)
+                            activity.finish()
+
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(activity, "Page Not Added", Toast.LENGTH_SHORT).show()
+                        }
+
+
+                }else{
+                    Toast.makeText(activity, "Page Not Found", Toast.LENGTH_SHORT).show()
+                }
+
+            }
+            .addOnFailureListener {
+                Toast.makeText(activity, "Some Error Occured finding Page", Toast.LENGTH_SHORT).show()
+
+            }
+
     }
 
 
