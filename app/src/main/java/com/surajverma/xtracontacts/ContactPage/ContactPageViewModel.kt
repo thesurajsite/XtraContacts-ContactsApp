@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -31,13 +32,13 @@ class ContactPageViewModel: ViewModel() {
     val contacts: LiveData<List<ContactsModel>> get() = _contacts
 
     fun createContactsPage(pageName: String, ownerId: String, activity: Activity){
-        val pageId = db.collection("CONTACT_PAGE").document().id
 //        val pageDetails = mapOf(
 //            "pageName" to pageName,
 //            "pageId" to pageId,
 //            "ownerId" to ownerId
 //        )
 
+        val pageId = db.collection("CONTACT_PAGE").document().id
         val pageDetails = ContactPageDetailsModel(pageName, pageId, ownerId)
 
         db.collection("CONTACT_PAGE").document(pageId).set(pageDetails)
@@ -52,7 +53,8 @@ class ContactPageViewModel: ViewModel() {
             }
 
         // Add Page to: My Contact Pages
-        db.collection("MY_CONTACT_PAGES").document(ownerId) .set(mapOf("ContactPages" to FieldValue.arrayUnion(pageDetails)), SetOptions.merge())
+        //val pageIdMap = mapOf("pageId" to pageId)
+        db.collection("MY_CONTACT_PAGES").document(ownerId) .set(mapOf("ContactPages" to FieldValue.arrayUnion(pageId)), SetOptions.merge())
             .addOnSuccessListener {
                 // Nothing
             }
@@ -60,35 +62,78 @@ class ContactPageViewModel: ViewModel() {
                 // Nothing
             }
 
+
     }
 
 
     fun fetchMyContactPages(userId: String, activity: Activity) {
-        db.collection("MY_CONTACT_PAGES").document(userId).get()
-            .addOnSuccessListener { document ->
-                if (document.exists()) {
+        val userDocRef = db.collection("MY_CONTACT_PAGES").document(userId)
+
+        userDocRef.get().addOnSuccessListener { document ->
+            if (document.exists()) {
+                val pageIdList = document.get("ContactPages") as? List<String> ?: emptyList()
+
+                if (pageIdList.isNotEmpty()) {
                     val contactPageList = mutableListOf<ContactPageDetailsModel>()
-                    val contactPages = document.get("ContactPages") as? List<Map<String, String>>
+                    val validPageIds = mutableListOf<String>()
+                    var processedCount = 0
 
-                    if (contactPages != null) {
-                        for (page in contactPages) {
-                            val pageName = page["pageName"] ?: ""
-                            val pageId = page["pageId"] ?: ""
-                            val ownerId = page["ownerId"] ?: ""
+                    for (pageId in pageIdList) {
+                        db.collection("CONTACT_PAGE").document(pageId).get()
+                            .addOnSuccessListener { pageDoc ->
+                                processedCount++
 
-                            contactPageList.add(ContactPageDetailsModel(pageName, pageId, ownerId))
-                        }
+                                if (pageDoc.exists()) {
+                                    val pageName = pageDoc.getString("pageName") ?: ""
+                                    val ownerId = pageDoc.getString("ownerId") ?: ""
+
+                                    contactPageList.add(ContactPageDetailsModel(pageName, pageId, ownerId))
+                                    validPageIds.add(pageId) // Keep only existing page IDs
+                                }
+
+                                // Update LiveData when all requests are done
+                                if (processedCount == pageIdList.size) {
+                                    _contactPages.value = contactPageList
+                                    if (validPageIds.size < pageIdList.size) {
+                                        cleanUpInvalidPageIds(userDocRef, validPageIds)
+                                    }
+                                }
+                            }
+                            .addOnFailureListener {
+                                processedCount++
+                                Log.e("Firestore", "Error fetching page $pageId")
+
+                                if (processedCount == pageIdList.size) {
+                                    _contactPages.value = contactPageList
+                                    if (validPageIds.size < pageIdList.size) {
+                                        cleanUpInvalidPageIds(userDocRef, validPageIds)
+                                    }
+                                }
+                            }
                     }
-
-                    _contactPages.value = contactPageList
                 } else {
-                    Toast.makeText(activity, "You have no Contact Pages", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, "No Contact Pages found", Toast.LENGTH_SHORT).show()
                 }
+            } else {
+                Toast.makeText(activity, "You have no Contact Pages", Toast.LENGTH_SHORT).show()
+            }
+        }.addOnFailureListener {
+            Toast.makeText(activity, "Error fetching pages", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    /** Remove deleted page IDs from MY_CONTACT_PAGES */
+    private fun cleanUpInvalidPageIds(userDocRef: DocumentReference, validPageIds: List<String>) {
+        userDocRef.update("ContactPages", validPageIds)
+            .addOnSuccessListener {
+                Log.d("Firestore", "Invalid page IDs removed successfully")
             }
             .addOnFailureListener {
-                Toast.makeText(activity, "Some error occurred fetching pages", Toast.LENGTH_SHORT).show()
+                Log.e("Firestore", "Error removing invalid page IDs")
             }
     }
+
+
 
 
     fun createContacts(contactDetails: ContactsModel,pageName: String, pageId: String, ownerId: String, userId: String, activity: Activity){
@@ -220,7 +265,7 @@ class ContactPageViewModel: ViewModel() {
     fun deleteContactPageForAll(pageId: String, activity: Activity){
         db.collection("CONTACT_PAGE").document(pageId).delete()
             .addOnSuccessListener {
-                Toast.makeText(activity, "$pageId Page Deleted for Everyone", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Page Deleted for Everyone", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener {
                 Toast.makeText(activity, "Couldn't Delete Page", Toast.LENGTH_SHORT).show()
@@ -228,16 +273,38 @@ class ContactPageViewModel: ViewModel() {
 
     }
 
-    fun deleteContactPageForMe(pageId: String, userId: String, activity: Activity){
-        db.collection("MY_CONTACT_PAGES").document(userId).collection("CONTACT_PAGES").document(pageId).delete()
-            .addOnSuccessListener {
-                Toast.makeText(activity, "Page Deleted", Toast.LENGTH_SHORT).show()
+    fun deleteContactPageForMe(userId: String, pageId: String, activity: Activity) {
+
+        //val userDocRef = db.collection("MY_CONTACT_PAGES").document(userId)
+
+        db.collection("MY_CONTACT_PAGES").document(userId).get()
+            .addOnSuccessListener { document ->
+
+                if (document.exists()) {
+                    val contactPages = document.get("ContactPages") as? List<Map<String, String>>
+
+                    // Filter out the page with the given pageId
+                    val updatedPages = contactPages?.filter { it["pageId"] != pageId }
+
+                    // Update Firestore with the new list
+                    db.collection("MY_CONTACT_PAGES").document(userId).update("ContactPages", updatedPages)
+                        .addOnSuccessListener {
+                            Toast.makeText(activity, "Contact Page Deleted", Toast.LENGTH_SHORT).show()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(activity, "Failed to delete Contact Page", Toast.LENGTH_SHORT).show()
+                        }
+
+                } else {
+                    Toast.makeText(activity, "No Contact Pages found", Toast.LENGTH_SHORT).show()
+                }
+
             }
             .addOnFailureListener {
-                Toast.makeText(activity, "Couldn't Delete Page", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(activity, "Error fetching pages", Toast.LENGTH_SHORT).show()
             }
-
     }
+
 }
 
 
