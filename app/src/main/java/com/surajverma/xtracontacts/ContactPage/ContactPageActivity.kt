@@ -32,7 +32,7 @@ class ContactPageActivity : AppCompatActivity() {
 
         binding.recyclerView.layoutManager= LinearLayoutManager(this)
         binding.recyclerView.setHasFixedSize(true)
-        val recyclerAdapter= ContactPagesRecyclerAdapter(this, arrContactPage, auth)
+        val recyclerAdapter= ContactPagesRecyclerAdapter(this, arrContactPage, auth, viewModel)
         binding.recyclerView.adapter = recyclerAdapter
 
 
