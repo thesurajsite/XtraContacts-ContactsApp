@@ -65,6 +65,20 @@ class ContactPageViewModel: ViewModel() {
 
     }
 
+    fun addContactPage(pageId: String, userId: String ,activity: Activity){
+        db.collection("MY_CONTACT_PAGES").document(userId) .set(mapOf("ContactPages" to FieldValue.arrayUnion(pageId)), SetOptions.merge())
+            .addOnSuccessListener {
+                Toast.makeText(activity, "Page Added", Toast.LENGTH_SHORT).show()
+                val intent = Intent(activity, ContactPageActivity::class.java)
+                activity.startActivity(intent)
+                activity.finish()
+            }
+            .addOnFailureListener {
+                Toast.makeText(activity, "Some Error Occured", Toast.LENGTH_SHORT).show()
+            }
+
+    }
+
 
     fun fetchMyContactPages(userId: String, activity: Activity) {
         val userDocRef = db.collection("MY_CONTACT_PAGES").document(userId)
@@ -189,45 +203,7 @@ class ContactPageViewModel: ViewModel() {
             }
     }
 
-    fun addContactPage(pageId: String, userId: String ,activity: Activity){
-        // Get Page Details like PageName, OwnerId, PageId
-        db.collection("CONTACT_PAGE").document(pageId).collection("PAGE_DETAILS").document("PAGE_DETAILS").get()
-            .addOnSuccessListener { document->
 
-                if (document.exists()) {
-                    Toast.makeText(activity, "Page Found", Toast.LENGTH_SHORT).show()
-
-                    val pageName = document.getString("pageName") ?: ""
-                    val ownerId = document.getString("ownerId") ?: ""
-                    val pageId = document.getString("pageId") ?: ""
-
-                    val contactPageDetails = ContactPageDetailsModel(pageName, pageId, ownerId)
-
-                    // Add Page to My Contact Pages
-                    db.collection("MY_CONTACT_PAGES").document(userId).collection("CONTACT_PAGES").document(pageId).set(contactPageDetails)
-                        .addOnSuccessListener {
-                            Toast.makeText(activity, "Page Added", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(activity, ContactPageActivity::class.java)
-                            activity.startActivity(intent)
-                            activity.finish()
-
-                        }
-                        .addOnFailureListener {
-                            Toast.makeText(activity, "Page Not Added", Toast.LENGTH_SHORT).show()
-                        }
-
-
-                }else{
-                    Toast.makeText(activity, "Page Not Found", Toast.LENGTH_SHORT).show()
-                }
-
-            }
-            .addOnFailureListener {
-                Toast.makeText(activity, "Some Error Occured finding Page", Toast.LENGTH_SHORT).show()
-
-            }
-
-    }
 
     fun deleteContactPage(pageId: String, ownerId: String, activity: Activity){
 
@@ -273,37 +249,20 @@ class ContactPageViewModel: ViewModel() {
 
     }
 
-    fun deleteContactPageForMe(userId: String, pageId: String, activity: Activity) {
-
-        //val userDocRef = db.collection("MY_CONTACT_PAGES").document(userId)
-
-        db.collection("MY_CONTACT_PAGES").document(userId).get()
-            .addOnSuccessListener { document ->
-
-                if (document.exists()) {
-                    val contactPages = document.get("ContactPages") as? List<Map<String, String>>
-
-                    // Filter out the page with the given pageId
-                    val updatedPages = contactPages?.filter { it["pageId"] != pageId }
-
-                    // Update Firestore with the new list
-                    db.collection("MY_CONTACT_PAGES").document(userId).update("ContactPages", updatedPages)
-                        .addOnSuccessListener {
-                            Toast.makeText(activity, "Contact Page Deleted", Toast.LENGTH_SHORT).show()
-                        }
-                        .addOnFailureListener {
-                            Toast.makeText(activity, "Failed to delete Contact Page", Toast.LENGTH_SHORT).show()
-                        }
-
-                } else {
-                    Toast.makeText(activity, "No Contact Pages found", Toast.LENGTH_SHORT).show()
-                }
-
+    fun deleteContactPageForMe(pageId: String, userId: String, activity: Activity) {
+        db.collection("MY_CONTACT_PAGES").document(userId)
+            .update("ContactPages", FieldValue.arrayRemove(pageId))
+            .addOnSuccessListener {
+                Toast.makeText(activity, "Page Deleted", Toast.LENGTH_SHORT).show()
+                val intent = Intent(activity, ContactPageActivity::class.java)
+                activity.startActivity(intent)
+                activity.finish()
             }
             .addOnFailureListener {
-                    Toast.makeText(activity, "Error fetching pages", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Some Error Occurred", Toast.LENGTH_SHORT).show()
             }
     }
+
 
 }
 
