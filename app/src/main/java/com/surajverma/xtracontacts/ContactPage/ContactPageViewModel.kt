@@ -54,7 +54,7 @@ class ContactPageViewModel: ViewModel() {
 
         // Add Page to: My Contact Pages
         //val pageIdMap = mapOf("pageId" to pageId)
-        db.collection("MY_CONTACT_PAGES").document(ownerId) .set(mapOf("ContactPages" to FieldValue.arrayUnion(pageId)), SetOptions.merge())
+        db.collection("MY_CONTACT_PAGES").document(ownerId).set(mapOf("ContactPages" to FieldValue.arrayUnion(pageId)), SetOptions.merge())
             .addOnSuccessListener {
                 // Nothing
             }
@@ -154,9 +154,9 @@ class ContactPageViewModel: ViewModel() {
 
         if(ownerId == userId){
 
-            val contactId = db.collection("CONTACT_PAGE").document(pageId).collection("PAGE_CONTACTS").document().id
+            val contactId = db.collection("CONTACT_PAGE").document(pageId).id
             contactDetails.id= contactId
-            db.collection("CONTACT_PAGE").document(pageId).collection("PAGE_CONTACTS").document(contactId).set(contactDetails)
+            db.collection("CONTACT_PAGE").document(pageId).set(mapOf("ContactsList" to FieldValue.arrayUnion(contactDetails)), SetOptions.merge())
                 .addOnSuccessListener {
                     Toast.makeText(activity, "Contact Created", Toast.LENGTH_SHORT).show()
                     val intent =  Intent(activity, AllContactsActivity::class.java)
@@ -173,35 +173,36 @@ class ContactPageViewModel: ViewModel() {
 
     }
 
-    fun fetchPageContacts(pageId: String, activity: Activity){
+    fun fetchPageContacts(pageId: String, activity: Activity) {
+        val contactsList = mutableListOf<ContactsModel>()
 
-        val contactList = mutableListOf<ContactsModel>()
+        db.collection("CONTACT_PAGE").document(pageId).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val contacts = document.get("ContactsList") as? List<Map<String, Any>> ?: emptyList()
 
-        db.collection("CONTACT_PAGE").document(pageId).collection("PAGE_CONTACTS")
-            .orderBy("name", Query.Direction.ASCENDING).get()
-            .addOnSuccessListener {
-                //Toast.makeText(activity, "Contacts Fetched", Toast.LENGTH_SHORT).show()
+                    if (contacts.isNotEmpty()) {
+                        for (contact in contacts) {
+                            val id = contact["id"] as? String ?: ""
+                            val name = contact["name"] as? String ?: ""
+                            val number = contact["number"] as? String ?: ""
+                            val email = contact["email"] as? String ?: ""
+                            val instagram = contact["instagram"] as? String ?: ""
+                            val x = contact["x"] as? String ?: ""
+                            val linkedin = contact["linkedin"] as? String ?: ""
 
-                for (document in it.documents) {
-                    val id = document.getString("id") ?: ""
-                    val name = document.getString("name") ?: ""
-                    val number = document.getString("number") ?: ""
-                    val email = document.getString("email") ?: ""
-                    val instagram = document.getString("instagram") ?: ""
-                    val x = document.getString("x") ?: ""
-                    val linkedin = document.getString("linkedin") ?: ""
+                            contactsList.add(ContactsModel(id, name, number, email, instagram, x, linkedin))
+                        }
 
-                    contactList.add(ContactsModel(id, name, number, email, instagram, x, linkedin))
-
+                        _contacts.value = contactsList
+                    }
                 }
-
-                _contacts.value=contactList
-
             }
             .addOnFailureListener {
-                Toast.makeText(activity, "Some Error Occured", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Some Error Occurred", Toast.LENGTH_SHORT).show()
             }
     }
+
 
 
 
