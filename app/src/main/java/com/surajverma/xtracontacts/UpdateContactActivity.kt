@@ -14,6 +14,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.surajverma.xtracontacts.ContactPage.ContactPageDetailsModel
+import com.surajverma.xtracontacts.ContactPage.ContactPageViewModel
 import com.surajverma.xtracontacts.databinding.ActivityUpdateContactBinding
 
 class UpdateContactActivity : AppCompatActivity() {
@@ -22,6 +24,7 @@ class UpdateContactActivity : AppCompatActivity() {
     lateinit var auth: FirebaseAuth
     private val db: FirebaseFirestore by lazy { Firebase.firestore}
     private lateinit var contactViewModel: ContactViewModel
+    private lateinit var contactPageViewModel: ContactPageViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +35,7 @@ class UpdateContactActivity : AppCompatActivity() {
         auth=FirebaseAuth.getInstance()
         val userId = auth.currentUser?.uid.toString()
         contactViewModel = ViewModelProvider(this).get(ContactViewModel::class.java)
+        contactPageViewModel = ViewModelProvider(this).get(ContactPageViewModel::class.java)
 
         binding.nameeditText.setText(intent.getStringExtra("name"))
         binding.numberEditText.setText(intent.getStringExtra("number"))
@@ -39,8 +43,23 @@ class UpdateContactActivity : AppCompatActivity() {
         binding.instagramEditText.setText(intent.getStringExtra("instagram"))
         binding.XEditText.setText(intent.getStringExtra("x"))
         binding.linkedEditText.setText(intent.getStringExtra("linkedin"))
+
         val isContactPage = intent.getBooleanExtra("isContactPage", false)
-        val ownerId = intent.getStringExtra("ownerId")
+        val pageDetails = intent.getSerializableExtra("pageDetails") as? ContactPageDetailsModel
+
+//        val pageName = intent.getStringExtra("pageName")
+//        val ownerId = intent.getStringExtra("ownerId")
+//        val pageId = intent.getStringExtra("pageId")
+
+        val originalContactDetails = ContactsModel(
+            intent.getStringExtra("id"),
+            intent.getStringExtra("name"),
+            intent.getStringExtra("number"),
+            intent.getStringExtra("email"),
+            intent.getStringExtra("instagram"),
+            intent.getStringExtra("x"),
+            intent.getStringExtra("linkedin")
+        )
 
         // Setting Drawable start image to EditText
         val nameLogo = ContextCompat.getDrawable(this, R.drawable.name_logo)
@@ -82,14 +101,14 @@ class UpdateContactActivity : AppCompatActivity() {
         }
 
 
-
-        if(isContactPage && userId == ownerId){
+        if(isContactPage && userId == pageDetails!!.ownerId){
             binding.deleteButton.visibility = View.VISIBLE
             binding.deleteButton.setOnClickListener {
-                Toast.makeText(this, "Dont Delete", Toast.LENGTH_SHORT).show()
+                val pageDetails = ContactPageDetailsModel(pageDetails.pageName ,pageDetails.pageId, pageDetails.ownerId)
+                contactPageViewModel.deletePageContact(originalContactDetails, pageDetails, this)
             }
         }
-        else if(isContactPage && userId != ownerId){
+        else if(isContactPage && userId != pageDetails!!.ownerId){
             binding.deleteButton.visibility = View.GONE
         }
         else{  // Not Contact Page

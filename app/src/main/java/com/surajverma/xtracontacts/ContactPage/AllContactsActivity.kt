@@ -33,9 +33,9 @@ class AllContactsActivity : AppCompatActivity() {
 
         val auth = FirebaseAuth.getInstance()
         val userId = auth.currentUser?.uid.toString()
-        val pageName = intent.getStringExtra("pageName")
-        val pageID = intent.getStringExtra("pageID")
-        val ownerId = intent.getStringExtra("ownerId")
+        val pageName = intent.getStringExtra("pageName") ?:""
+        val pageID = intent.getStringExtra("pageID")?:""
+        val ownerId = intent.getStringExtra("ownerId")?:""
         binding.pageNameTextView.text = pageName
 
         viewModel = ContactPageViewModel()
@@ -43,7 +43,7 @@ class AllContactsActivity : AppCompatActivity() {
 
         binding.recyclerView.layoutManager= LinearLayoutManager(this)
         binding.recyclerView.setHasFixedSize(true)
-        val recyclerAdapter= RecyclerContactAdapter(this, arrContacts, true, ownerId!!)
+        val recyclerAdapter= RecyclerContactAdapter(this, arrContacts, true, ContactPageDetailsModel(pageName, pageID, ownerId))
         binding.recyclerView.adapter = recyclerAdapter
 
 

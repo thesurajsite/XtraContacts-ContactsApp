@@ -14,13 +14,14 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.surajverma.xtracontacts.ContactPage.ContactPageDetailsModel
 import java.util.ArrayList
 
 class RecyclerContactAdapter(
     private val context: Context,
     private val arrContacts: ArrayList<ContactsModel>,
     private val isContactPage: Boolean,
-    private val ownerId: String
+    private val pageDetails: ContactPageDetailsModel,
 ): RecyclerView.Adapter<RecyclerContactAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -75,9 +76,13 @@ class RecyclerContactAdapter(
             intent.putExtra("instagram", arrContacts[position].instagram)
             intent.putExtra("x", arrContacts[position].x)
             intent.putExtra("linkedin", arrContacts[position].linkedin)
+
+            val pageDetails = ContactPageDetailsModel( pageDetails.pageName, pageDetails.pageId, pageDetails.ownerId)
             intent.putExtra("isContactPage", isContactPage)
-            intent.putExtra("ownerId", ownerId)
+            intent.putExtra("pageDetails", pageDetails)
             context.startActivity(intent)
+//            intent.putExtra("pageId", pageId)
+//            intent.putExtra("ownerId", ownerId)
         }
 
         holder.callButton.setOnClickListener {

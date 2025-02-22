@@ -22,6 +22,7 @@ import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
 import com.google.android.play.core.ktx.isImmediateUpdateAllowed
 import com.google.firebase.auth.FirebaseAuth
 import com.surajverma.xtracontacts.ContactPage.ContactPageActivity
+import com.surajverma.xtracontacts.ContactPage.ContactPageDetailsModel
 import com.surajverma.xtracontacts.databinding.ActivityMainBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -66,7 +67,7 @@ class MainActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager= LinearLayoutManager(this)
         binding.recyclerView.setHasFixedSize(true)
         arrContact= ArrayList<ContactsModel>()
-        val recyclerAdapter= RecyclerContactAdapter(this, arrContact, false, "nothing")
+        val recyclerAdapter= RecyclerContactAdapter(this, arrContact, false, ContactPageDetailsModel("", "", ""))
         binding.recyclerView.adapter = recyclerAdapter
 
         binding.floatingActionButton.setOnClickListener {

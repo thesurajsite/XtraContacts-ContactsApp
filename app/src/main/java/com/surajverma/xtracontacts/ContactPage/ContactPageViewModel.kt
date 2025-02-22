@@ -19,6 +19,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.surajverma.xtracontacts.ContactsModel
 import com.surajverma.xtracontacts.R
+import java.io.Serializable
 
 class ContactPageViewModel: ViewModel() {
 
@@ -203,6 +204,26 @@ class ContactPageViewModel: ViewModel() {
             }
     }
 
+    fun deletePageContact(contactDetails: ContactsModel, pageDetails:ContactPageDetailsModel, activity: Activity) {
+        val db = FirebaseFirestore.getInstance()
+
+        db.collection("CONTACT_PAGE").document(pageDetails.pageId)
+            .update("ContactsList", FieldValue.arrayRemove(contactDetails))
+            .addOnSuccessListener {
+                Toast.makeText(activity, "Contact Deleted", Toast.LENGTH_SHORT).show()
+                val intent = Intent(activity, AllContactsActivity::class.java)
+                intent.putExtra("pageID", pageDetails.pageId)
+                intent.putExtra("ownerId", pageDetails.ownerId)
+                intent.putExtra("pageName", pageDetails.pageName)
+                activity.startActivity(intent)
+                activity.finish()
+            }
+            .addOnFailureListener {
+                Toast.makeText(activity, "Failed to delete contact", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+
 
 
 
@@ -272,4 +293,4 @@ data class ContactPageDetailsModel(
     val pageName: String,
     val pageId: String,
     val ownerId: String
-)
+) : Serializable
