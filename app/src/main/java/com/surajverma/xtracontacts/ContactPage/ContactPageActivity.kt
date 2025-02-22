@@ -3,12 +3,15 @@ package com.surajverma.xtracontacts.ContactPage
 import android.content.Intent
 import android.os.Bundle
 import android.os.Vibrator
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
+import com.surajverma.xtracontacts.MainActivity
+import com.surajverma.xtracontacts.R
 import com.surajverma.xtracontacts.databinding.ActivityContactPageBinding
 
 class ContactPageActivity : AppCompatActivity() {
@@ -36,17 +39,35 @@ class ContactPageActivity : AppCompatActivity() {
         binding.recyclerView.adapter = recyclerAdapter
 
 
+        binding.Progressbar.visibility= View.VISIBLE
         viewModel.fetchMyContactPages(userId, this)
         viewModel.contactPages.observe(this, Observer {
             arrContactPage.clear()
             arrContactPage.addAll(it)
             recyclerAdapter.notifyDataSetChanged()
+            binding.Progressbar.visibility= View.GONE
         })
 
         binding.floatingActionButton.setOnClickListener {
             vibrator.vibrate(50)
             val intent = Intent(this, CreateContactPageActivity::class.java)
             startActivity(intent)
+        }
+
+        // Bottom Navigation
+        binding.bottomNavigation.setSelectedItemId(R.id.ContactPages)
+        binding.bottomNavigation.setOnItemSelectedListener {
+
+            when(it.itemId){
+                R.id.MyContacts ->{
+                    vibrator.vibrate(50)
+                    //sharedPreferenceManager.updateNavigationCode(2)
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
+                }
+            }
+
+            return@setOnItemSelectedListener true
         }
 
     }

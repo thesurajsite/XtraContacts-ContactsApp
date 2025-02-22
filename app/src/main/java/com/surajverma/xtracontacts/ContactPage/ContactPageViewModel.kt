@@ -278,7 +278,7 @@ class ContactPageViewModel: ViewModel() {
         val builder = AlertDialog.Builder(activity)
             .setTitle("Delete Contact Page")
             .setIcon(R.drawable.contact_page)
-            .setMessage(if (ownerId == userId) "Are you sure you want to delete this page? It will be deleted for EVERYONE" else "Are you sure you want to delete this page? It will be deleted only for you")
+            .setMessage(if (ownerId == userId) "Page will be deleted for EVERYONE" else "Page will be deleted only for YOU")
             .setPositiveButton(
                 "YES"
             ) { dialogInterface, i ->

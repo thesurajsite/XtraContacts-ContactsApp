@@ -96,10 +96,22 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.contactPageButton.setOnClickListener {
-            vibrator.vibrate(50)
-            val intent = Intent(this, ContactPageActivity::class.java)
-            startActivity(intent)
+
+        // Bottom Navigation
+        binding.bottomNavigation.setSelectedItemId(R.id.MyContacts)
+        binding.bottomNavigation.setOnItemSelectedListener {
+
+            when(it.itemId){
+
+                R.id.ContactPages ->{
+                    vibrator.vibrate(50)
+                    //sharedPreferenceManager.updateNavigationCode(3)
+                    startActivity(Intent(this, ContactPageActivity::class.java))
+                    finish()
+                }
+            }
+
+            return@setOnItemSelectedListener true
         }
 
 

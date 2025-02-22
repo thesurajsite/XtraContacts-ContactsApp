@@ -1,6 +1,7 @@
 package com.surajverma.xtracontacts.ContactPage
 
 import android.os.Bundle
+import android.os.Vibrator
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -25,14 +26,21 @@ class CreateContactPageActivity : AppCompatActivity() {
         viewModel = ContactPageViewModel()
         auth = FirebaseAuth.getInstance()
         val userId = auth.currentUser?.uid.toString()
+        val vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
 
        binding.createContactsPageButton.setOnClickListener {
+           vibrator.vibrate(50)
            val pageName = binding.contactsPageName.text.toString()
            val userId = auth.currentUser?.uid.toString()
-           viewModel.createContactsPage(pageName, userId, this)
+           if(pageName.isNotEmpty()){
+               viewModel.createContactsPage(pageName, userId, this)
+           }else{
+               Toast.makeText(this, "Enter Page Name", Toast.LENGTH_SHORT).show()
+           }
        }
 
         binding.addContactsPageButton.setOnClickListener {
+            vibrator.vibrate(50)
             if(binding.contactsPageId.text.toString().isNotEmpty()){
                 val pageId = binding.contactsPageId.text.toString()
                 viewModel.addContactPage(pageId, userId, this)

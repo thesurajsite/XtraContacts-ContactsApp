@@ -1,0 +1,19 @@
+<!-- bottom_navigation_menu.xml -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+  <item
+    android:id="@+id/MyContacts"
+    android:title="My Contacts"
+    android:icon="@drawable/contact"
+    />
+
+
+  <item
+    android:id="@+id/ContactPages"
+    android:title="Contact Pages"
+    android:icon="@drawable/contact_page"
+    />
+
+
+
+</menu>
