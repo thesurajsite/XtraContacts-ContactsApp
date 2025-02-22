@@ -43,7 +43,7 @@ class AllContactsActivity : AppCompatActivity() {
 
         binding.recyclerView.layoutManager= LinearLayoutManager(this)
         binding.recyclerView.setHasFixedSize(true)
-        val recyclerAdapter= RecyclerContactAdapter(this, arrContacts, true, ContactPageDetailsModel(pageName, pageID, ownerId))
+        val recyclerAdapter= RecyclerContactAdapter(this, arrContacts, true)
         binding.recyclerView.adapter = recyclerAdapter
 
 

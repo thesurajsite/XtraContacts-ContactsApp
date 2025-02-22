@@ -108,6 +108,7 @@ class ContactPageViewModel: ViewModel() {
 
                                 // Update LiveData when all requests are done
                                 if (processedCount == pageIdList.size) {
+                                    contactPageList.sortBy { it.pageName.lowercase() }
                                     _contactPages.value = contactPageList
                                     if (validPageIds.size < pageIdList.size) {
                                         cleanUpInvalidPageIds(userDocRef, validPageIds)
@@ -151,19 +152,19 @@ class ContactPageViewModel: ViewModel() {
 
 
 
-    fun createContacts(contactDetails: ContactsModel,pageName: String, pageId: String, ownerId: String, userId: String, activity: Activity){
+    fun createContacts(contactDetails: ContactsModel, userId: String, activity: Activity){
 
-        if(ownerId == userId){
+        if(contactDetails.ownerId == userId){
 
-            val contactId = db.collection("CONTACT_PAGE").document(pageId).id
+            val contactId = db.collection("CONTACT_PAGE").document().id
             contactDetails.id= contactId
-            db.collection("CONTACT_PAGE").document(pageId).set(mapOf("ContactsList" to FieldValue.arrayUnion(contactDetails)), SetOptions.merge())
+            db.collection("CONTACT_PAGE").document(contactDetails.pageId!!).set(mapOf("ContactsList" to FieldValue.arrayUnion(contactDetails)), SetOptions.merge())
                 .addOnSuccessListener {
                     Toast.makeText(activity, "Contact Created", Toast.LENGTH_SHORT).show()
                     val intent =  Intent(activity, AllContactsActivity::class.java)
-                    intent.putExtra("pageName", pageName)
-                    intent.putExtra("pageID", pageId)
-                    intent.putExtra("ownerId", ownerId)
+                    intent.putExtra("pageName", contactDetails.pageName)
+                    intent.putExtra("pageID", contactDetails.pageId)
+                    intent.putExtra("ownerId", contactDetails.ownerId)
                     activity.startActivity(intent)
                     activity.finish()
                 }
@@ -191,10 +192,14 @@ class ContactPageViewModel: ViewModel() {
                             val instagram = contact["instagram"] as? String ?: ""
                             val x = contact["x"] as? String ?: ""
                             val linkedin = contact["linkedin"] as? String ?: ""
+                            val pageName = contact["pageName"] as? String ?: ""
+                            val pageId = contact["pageId"] as? String ?: ""
+                            val ownerId = contact["ownerId"] as? String ?: ""
 
-                            contactsList.add(ContactsModel(id, name, number, email, instagram, x, linkedin))
+                            contactsList.add(ContactsModel(id, name, number, email, instagram, x, linkedin, pageName, pageId, ownerId))
                         }
 
+                        contactsList.sortBy { it.name!!.lowercase() }
                         _contacts.value = contactsList
                     }
                 }
@@ -204,17 +209,17 @@ class ContactPageViewModel: ViewModel() {
             }
     }
 
-    fun deletePageContact(contactDetails: ContactsModel, pageDetails:ContactPageDetailsModel, activity: Activity) {
+    fun deletePageContact(contactDetails: ContactsModel, activity: Activity) {
         val db = FirebaseFirestore.getInstance()
 
-        db.collection("CONTACT_PAGE").document(pageDetails.pageId)
+        db.collection("CONTACT_PAGE").document(contactDetails.pageId!!)
             .update("ContactsList", FieldValue.arrayRemove(contactDetails))
             .addOnSuccessListener {
                 Toast.makeText(activity, "Contact Deleted", Toast.LENGTH_SHORT).show()
                 val intent = Intent(activity, AllContactsActivity::class.java)
-                intent.putExtra("pageID", pageDetails.pageId)
-                intent.putExtra("ownerId", pageDetails.ownerId)
-                intent.putExtra("pageName", pageDetails.pageName)
+                intent.putExtra("pageID", contactDetails.pageId)
+                intent.putExtra("ownerId", contactDetails.ownerId)
+                intent.putExtra("pageName", contactDetails.pageName)
                 activity.startActivity(intent)
                 activity.finish()
             }
@@ -223,6 +228,45 @@ class ContactPageViewModel: ViewModel() {
             }
     }
 
+    fun updateContact(contactDetails: ContactsModel, activity: Activity) {
+        val contactRef = db.collection("CONTACT_PAGE").document(contactDetails.pageId!!)
+
+        contactRef.get().addOnSuccessListener { document ->
+            if (document.exists()) {
+                val contactsList = document.get("ContactsList") as? List<Map<String, Any>>
+                val existingContact = contactsList?.find { it["id"] == contactDetails.id }
+
+                if (existingContact != null) {
+                    // Remove the old contact and add the updated one
+                    contactRef.update("ContactsList", FieldValue.arrayRemove(existingContact))
+                        .addOnSuccessListener {
+                            contactRef.update("ContactsList", FieldValue.arrayUnion(contactDetails))
+                                .addOnSuccessListener {
+                                    Toast.makeText(activity, "Contact Updated", Toast.LENGTH_SHORT).show()
+                                    val intent = Intent(activity, AllContactsActivity::class.java)
+                                    intent.putExtra("pageID", contactDetails.pageId)
+                                    intent.putExtra("ownerId", contactDetails.ownerId)
+                                    intent.putExtra("pageName", contactDetails.pageName)
+                                    activity.startActivity(intent)
+                                    activity.finish()
+                                }
+                                .addOnFailureListener {
+                                    Toast.makeText(activity, "Error Updating Contact", Toast.LENGTH_SHORT).show()
+                                }
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(activity, "Some Error Occured", Toast.LENGTH_SHORT).show()
+                        }
+                } else {
+                    Toast.makeText(activity, "Contact Not Found", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(activity, "Page Not Found", Toast.LENGTH_SHORT).show()
+            }
+        }.addOnFailureListener {
+            Toast.makeText(activity, "Error Fetching Data", Toast.LENGTH_SHORT).show()
+        }
+    }
 
 
 
@@ -264,6 +308,9 @@ class ContactPageViewModel: ViewModel() {
         db.collection("CONTACT_PAGE").document(pageId).delete()
             .addOnSuccessListener {
                 Toast.makeText(activity, "Page Deleted for Everyone", Toast.LENGTH_SHORT).show()
+                val intent = Intent(activity, ContactPageActivity::class.java)
+                activity.startActivity(intent)
+                activity.finish()
             }
             .addOnFailureListener {
                 Toast.makeText(activity, "Couldn't Delete Page", Toast.LENGTH_SHORT).show()

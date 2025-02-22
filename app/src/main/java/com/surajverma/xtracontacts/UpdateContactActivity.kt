@@ -37,28 +37,39 @@ class UpdateContactActivity : AppCompatActivity() {
         contactViewModel = ViewModelProvider(this).get(ContactViewModel::class.java)
         contactPageViewModel = ViewModelProvider(this).get(ContactPageViewModel::class.java)
 
-        binding.nameeditText.setText(intent.getStringExtra("name"))
-        binding.numberEditText.setText(intent.getStringExtra("number"))
-        binding.emailEditText.setText(intent.getStringExtra("email"))
-        binding.instagramEditText.setText(intent.getStringExtra("instagram"))
-        binding.XEditText.setText(intent.getStringExtra("x"))
-        binding.linkedEditText.setText(intent.getStringExtra("linkedin"))
+
+        val id = intent.getStringExtra("id")
+        val name = intent.getStringExtra("name")
+        val number = intent.getStringExtra("number")
+        val email = intent.getStringExtra("email")
+        val instagram = intent.getStringExtra("instagram")
+        val x = intent.getStringExtra("x")
+        val linkedin = intent.getStringExtra("linkedin")
+        val pageName = intent.getStringExtra("pageName")
+        val pageId = intent.getStringExtra("pageId")
+        val ownerId = intent.getStringExtra("ownerId")
 
         val isContactPage = intent.getBooleanExtra("isContactPage", false)
-        val pageDetails = intent.getSerializableExtra("pageDetails") as? ContactPageDetailsModel
 
-//        val pageName = intent.getStringExtra("pageName")
-//        val ownerId = intent.getStringExtra("ownerId")
-//        val pageId = intent.getStringExtra("pageId")
+        binding.nameeditText.setText(name)
+        binding.numberEditText.setText(number)
+        binding.emailEditText.setText(email)
+        binding.instagramEditText.setText(instagram)
+        binding.XEditText.setText(x)
+        binding.linkedEditText.setText(linkedin)
 
-        val originalContactDetails = ContactsModel(
+
+        val contactDetails = ContactsModel(
             intent.getStringExtra("id"),
             intent.getStringExtra("name"),
             intent.getStringExtra("number"),
             intent.getStringExtra("email"),
             intent.getStringExtra("instagram"),
             intent.getStringExtra("x"),
-            intent.getStringExtra("linkedin")
+            intent.getStringExtra("linkedin"),
+            intent.getStringExtra("pageName"),
+            intent.getStringExtra("pageId"),
+            intent.getStringExtra("ownerId")
         )
 
         // Setting Drawable start image to EditText
@@ -87,39 +98,54 @@ class UpdateContactActivity : AppCompatActivity() {
         x_logo?.setBounds(0, 0, 60,60) // Width and height in pixels
         binding.XEditText.setCompoundDrawablesRelative(x_logo, null, null, null)
 
-        binding.saveButton.setOnClickListener {
-            val id = intent.getStringExtra("id")
-            val name = binding.nameeditText.text.toString()
-            val number = binding.numberEditText.text.toString()
-            val email = binding.emailEditText.text.toString()
-            val instagram = binding.instagramEditText.text.toString()
-            val x = binding.XEditText.text.toString()
-            val linkedin = binding.linkedEditText.text.toString()
 
-            val contactDetails =  ContactsModel(id, name, number, email, instagram, x, linkedin)
-            contactViewModel.updateContact(contactDetails, this)
-        }
-
-
-        if(isContactPage && userId == pageDetails!!.ownerId){
+        if(isContactPage && userId == ownerId){
             binding.deleteButton.visibility = View.VISIBLE
+            binding.saveButton.visibility = View.VISIBLE
+
             binding.deleteButton.setOnClickListener {
-                val pageDetails = ContactPageDetailsModel(pageDetails.pageName ,pageDetails.pageId, pageDetails.ownerId)
-                contactPageViewModel.deletePageContact(originalContactDetails, pageDetails, this)
+                contactPageViewModel.deletePageContact(contactDetails, this)
+            }
+
+            binding.saveButton.setOnClickListener {
+                val id = intent.getStringExtra("id")
+                val name = binding.nameeditText.text.toString()
+                val number = binding.numberEditText.text.toString()
+                val email = binding.emailEditText.text.toString()
+                val instagram = binding.instagramEditText.text.toString()
+                val x = binding.XEditText.text.toString()
+                val linkedin = binding.linkedEditText.text.toString()
+
+                val contactDetails =  ContactsModel(id, name, number, email, instagram, x, linkedin, pageName, pageId, ownerId)
+                contactPageViewModel.updateContact(contactDetails, this)
+
             }
         }
-        else if(isContactPage && userId != pageDetails!!.ownerId){
+        else if(isContactPage && userId != ownerId){
             binding.deleteButton.visibility = View.GONE
+            binding.saveButton.visibility = View.GONE
         }
-        else{  // Not Contact Page
+        else{
+            // Not Contact Page
             binding.deleteButton.setOnClickListener {
                 val id = intent.getStringExtra("id")
                 contactViewModel.deleteContact(id!!, this)
             }
+
+            binding.saveButton.setOnClickListener {
+                val id = intent.getStringExtra("id")
+                val name = binding.nameeditText.text.toString()
+                val number = binding.numberEditText.text.toString()
+                val email = binding.emailEditText.text.toString()
+                val instagram = binding.instagramEditText.text.toString()
+                val x = binding.XEditText.text.toString()
+                val linkedin = binding.linkedEditText.text.toString()
+
+                val contactDetails =  ContactsModel(id, name, number, email, instagram, x, linkedin)
+                contactViewModel.updateContact(contactDetails, this)
+            }
         }
 
-        // If Contact Page, Hide Save Button
-        if(isContactPage) binding.saveButton.visibility = View.GONE
 
 
     }

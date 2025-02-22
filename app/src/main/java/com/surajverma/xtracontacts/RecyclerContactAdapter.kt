@@ -21,7 +21,7 @@ class RecyclerContactAdapter(
     private val context: Context,
     private val arrContacts: ArrayList<ContactsModel>,
     private val isContactPage: Boolean,
-    private val pageDetails: ContactPageDetailsModel,
+    //private val pageDetails: ContactPageDetailsModel,
 ): RecyclerView.Adapter<RecyclerContactAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -76,13 +76,13 @@ class RecyclerContactAdapter(
             intent.putExtra("instagram", arrContacts[position].instagram)
             intent.putExtra("x", arrContacts[position].x)
             intent.putExtra("linkedin", arrContacts[position].linkedin)
+            intent.putExtra("pageName", arrContacts[position].pageName)
+            intent.putExtra("pageId", arrContacts[position].pageId)
+            intent.putExtra("ownerId", arrContacts[position].ownerId)
 
-            val pageDetails = ContactPageDetailsModel( pageDetails.pageName, pageDetails.pageId, pageDetails.ownerId)
             intent.putExtra("isContactPage", isContactPage)
-            intent.putExtra("pageDetails", pageDetails)
             context.startActivity(intent)
-//            intent.putExtra("pageId", pageId)
-//            intent.putExtra("ownerId", ownerId)
+
         }
 
         holder.callButton.setOnClickListener {

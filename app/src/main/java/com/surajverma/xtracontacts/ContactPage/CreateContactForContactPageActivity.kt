@@ -44,8 +44,8 @@ class CreateContactForContactPageActivity : AppCompatActivity() {
             val linkedin = binding.linkedEditText.text.toString()
 
             if(name.isNotEmpty()){
-                val contactDetails = ContactsModel("", name, number, email, instagram, x, linkedin)
-                viewModel.createContacts(contactDetails, pageName!!, pageID!!, ownerId!!, userId, this)
+                val contactDetails = ContactsModel("", name, number, email, instagram, x, linkedin, pageName, pageID, ownerId)
+                viewModel.createContacts(contactDetails, userId, this)
             }else{
                 Toast.makeText(this, "Please Enter Name", Toast.LENGTH_SHORT).show()
 
