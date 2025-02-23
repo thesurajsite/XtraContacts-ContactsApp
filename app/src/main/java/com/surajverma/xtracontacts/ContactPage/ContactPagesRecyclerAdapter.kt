@@ -56,7 +56,7 @@ class ContactPagesRecyclerAdapter(
             holder.vibrator.vibrate(50)
             val intent = Intent(context, AllContactsActivity::class.java)
             intent.putExtra("pageName", pageName)
-            intent.putExtra("pageID", pageId)
+            intent.putExtra("pageId", pageId)
             intent.putExtra("ownerId", ownerId)
             context.startActivity(intent)
         }

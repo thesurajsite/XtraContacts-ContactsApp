@@ -34,7 +34,7 @@ class AllContactsActivity : AppCompatActivity() {
         val auth = FirebaseAuth.getInstance()
         val userId = auth.currentUser?.uid.toString()
         val pageName = intent.getStringExtra("pageName") ?:""
-        val pageID = intent.getStringExtra("pageID")?:""
+        val pageId = intent.getStringExtra("pageId")?:""
         val ownerId = intent.getStringExtra("ownerId")?:""
         binding.pageNameTextView.text = pageName
 
@@ -47,7 +47,7 @@ class AllContactsActivity : AppCompatActivity() {
         binding.recyclerView.adapter = recyclerAdapter
 
 
-        viewModel.fetchPageContacts(pageID!!, this)
+        viewModel.fetchPageContacts(pageId!!, this)
         viewModel.contacts.observe(this, Observer {
             arrContacts.clear()
             arrContacts.addAll(it)
@@ -63,14 +63,15 @@ class AllContactsActivity : AppCompatActivity() {
         binding.floatingActionButton.setOnClickListener {
             val intent = Intent(this, CreateContactForContactPageActivity::class.java)
             intent.putExtra("pageName", pageName)
-            intent.putExtra("pageID", pageID)
+            intent.putExtra("pageID", pageId)
             intent.putExtra("ownerId", ownerId)
             startActivity(intent)
             finish()
         }
 
         binding.copyCardView.setOnClickListener {
-            copyPageId(this, pageID)
+            val newPageId = "https://"+pageId+".xtra"
+            copyPageId(this, newPageId)
         }
 
 

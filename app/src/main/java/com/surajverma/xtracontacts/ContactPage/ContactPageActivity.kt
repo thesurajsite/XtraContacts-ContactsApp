@@ -48,6 +48,7 @@ class ContactPageActivity : AppCompatActivity() {
             binding.Progressbar.visibility= View.GONE
         })
 
+
         binding.floatingActionButton.setOnClickListener {
             vibrator.vibrate(50)
             val intent = Intent(this, CreateContactPageActivity::class.java)

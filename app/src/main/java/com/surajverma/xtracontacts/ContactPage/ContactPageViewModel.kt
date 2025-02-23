@@ -67,7 +67,8 @@ class ContactPageViewModel: ViewModel() {
     }
 
     fun addContactPage(pageId: String, userId: String ,activity: Activity){
-        db.collection("MY_CONTACT_PAGES").document(userId) .set(mapOf("ContactPages" to FieldValue.arrayUnion(pageId)), SetOptions.merge())
+        val cleanPageId = cleanPageId(pageId)  // Removes https:// & .xtra from the pageId
+        db.collection("MY_CONTACT_PAGES").document(userId) .set(mapOf("ContactPages" to FieldValue.arrayUnion(cleanPageId)), SetOptions.merge())
             .addOnSuccessListener {
                 Toast.makeText(activity, "Page Added", Toast.LENGTH_SHORT).show()
                 val intent = Intent(activity, ContactPageActivity::class.java)
@@ -78,6 +79,12 @@ class ContactPageViewModel: ViewModel() {
                 Toast.makeText(activity, "Some Error Occured", Toast.LENGTH_SHORT).show()
             }
 
+    }
+
+    fun cleanPageId(id: String): String {
+        return id.removePrefix("https://www.")
+            .removePrefix("https://")
+            .removeSuffix(".xtra")
     }
 
 
