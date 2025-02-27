@@ -70,7 +70,7 @@
       android:id="@+id/contactsPageId"
       android:layout_width="match_parent"
       android:layout_height="50dp"
-      android:hint="Enter Page ID"
+      android:hint="Enter Page URL"
       android:textColorHint="@color/black"
       android:gravity="center"
       android:textColor="@color/black"

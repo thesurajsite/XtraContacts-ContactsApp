@@ -27,7 +27,6 @@ class AllContactsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         binding = ActivityAllContactsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

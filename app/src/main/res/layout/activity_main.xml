@@ -61,27 +61,28 @@
           android:clickable="true"
           app:srcCompat="@drawable/add"
           app:tint="@color/black"
-          android:layout_marginBottom="100dp"
+          android:layout_marginBottom="30dp"
           android:layout_marginRight="35dp"
           android:tint="@color/black"
           android:backgroundTint="@color/white"
           app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintBottom_toBottomOf="parent"
-          app:layout_goneMarginBottom="50dp"
+          app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
           app:layout_goneMarginRight="30dp"
           />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+          android:id="@+id/bottomNavigation"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          app:layout_constraintBottom_toBottomOf="parent"
+          android:background="@color/white"
+          app:itemIconTint="@color/bottom_navigation_icon_color"
+          app:itemTextColor="@color/bottom_navigation_icon_color"
+          app:menu="@menu/bottom_navigation_menu"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-      android:id="@+id/bottomNavigation"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      app:layout_constraintBottom_toBottomOf="parent"
-      android:background="@color/white"
-      app:itemIconTint="@color/bottom_navigation_icon_color"
-      app:itemTextColor="@color/bottom_navigation_icon_color"
-      app:menu="@menu/bottom_navigation_menu"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
