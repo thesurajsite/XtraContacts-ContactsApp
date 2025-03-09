@@ -15,6 +15,9 @@
     android:theme="@style/Theme.XtraContacts"
     tools:targetApi="31">
     <activity
+      android:name=".DiscoverPages.DiscoverPageActivity"
+      android:exported="false" />
+    <activity
       android:name=".ContactPage.CreateContactForContactPageActivity"
       android:exported="false" />
     <activity

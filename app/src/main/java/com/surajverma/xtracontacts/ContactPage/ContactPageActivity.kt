@@ -9,7 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.airbnb.lottie.LottieAnimationView
 import com.google.firebase.auth.FirebaseAuth
+import com.surajverma.xtracontacts.DiscoverPages.DiscoverPageActivity
 import com.surajverma.xtracontacts.MainActivity
 import com.surajverma.xtracontacts.R
 import com.surajverma.xtracontacts.databinding.ActivityContactPageBinding
@@ -32,6 +34,9 @@ class ContactPageActivity : AppCompatActivity() {
         val userId=auth.currentUser?.uid.toString()
         viewModel= ViewModelProvider(this).get(ContactPageViewModel::class.java)
         val vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
+        val earthAnimation = findViewById<LottieAnimationView>(R.id.earthAnimation)
+        earthAnimation.playAnimation()
+
 
         binding.recyclerView.layoutManager= LinearLayoutManager(this)
         binding.recyclerView.setHasFixedSize(true)
@@ -69,6 +74,11 @@ class ContactPageActivity : AppCompatActivity() {
             }
 
             return@setOnItemSelectedListener true
+        }
+
+        earthAnimation.setOnClickListener {
+            vibrator.vibrate(50)
+            startActivity(Intent(this, DiscoverPageActivity::class.java))
         }
 
     }
