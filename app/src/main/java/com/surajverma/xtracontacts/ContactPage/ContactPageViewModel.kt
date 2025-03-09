@@ -170,8 +170,9 @@ class ContactPageViewModel: ViewModel() {
                     Toast.makeText(activity, "Contact Created", Toast.LENGTH_SHORT).show()
                     val intent =  Intent(activity, AllContactsActivity::class.java)
                     intent.putExtra("pageName", contactDetails.pageName)
-                    intent.putExtra("pageID", contactDetails.pageId)
+                    intent.putExtra("pageId", contactDetails.pageId)
                     intent.putExtra("ownerId", contactDetails.ownerId)
+                   // Toast.makeText(activity, "${contactDetails.pageId}", Toast.LENGTH_SHORT).show()
                     activity.startActivity(intent)
                     activity.finish()
                 }
@@ -183,6 +184,12 @@ class ContactPageViewModel: ViewModel() {
     }
 
     fun fetchPageContacts(pageId: String, activity: Activity) {
+
+        if (pageId.isBlank()) {  // Prevent invalid document reference
+            Toast.makeText(activity, "Invalid page reference", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val contactsList = mutableListOf<ContactsModel>()
 
         db.collection("CONTACT_PAGE").document(pageId).get()
@@ -251,7 +258,7 @@ class ContactPageViewModel: ViewModel() {
                                 .addOnSuccessListener {
                                     Toast.makeText(activity, "Contact Updated", Toast.LENGTH_SHORT).show()
                                     val intent = Intent(activity, AllContactsActivity::class.java)
-                                    intent.putExtra("pageID", contactDetails.pageId)
+                                    intent.putExtra("pageId", contactDetails.pageId)
                                     intent.putExtra("ownerId", contactDetails.ownerId)
                                     intent.putExtra("pageName", contactDetails.pageName)
                                     activity.startActivity(intent)
