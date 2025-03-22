@@ -36,6 +36,7 @@ class RecyclerContactAdapter(
         var instagramButton: ImageView = itemView.findViewById(R.id.instagramButton)
         var xButton: ImageView = itemView.findViewById(R.id.XButton)
         var linkedinButton: ImageView = itemView.findViewById(R.id.linkedinButton)
+        var shareButton : ImageView = itemView.findViewById(R.id.shareButton)
         val vibrator = itemView.context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 
@@ -59,9 +60,11 @@ class RecyclerContactAdapter(
             holder.vibrator.vibrate(50)
             arr[0] = if (arr[0] == 0) {
                 holder.linear.visibility = View.VISIBLE
+                holder.shareButton.visibility = View.VISIBLE
                 1
             } else {
                 holder.linear.visibility = View.GONE
+                holder.shareButton.visibility = View.GONE
                 0
             }
         }
@@ -210,6 +213,51 @@ class RecyclerContactAdapter(
                 Toast.makeText(context, "Invalid LinkedIn ID", Toast.LENGTH_SHORT).show()
             }
         }
+
+        holder.shareButton.setOnClickListener {
+            holder.vibrator.vibrate(50)
+
+            val name = arrContacts[position].name
+            val number = arrContacts[position].number
+            val email = arrContacts[position].email
+            val instagram = arrContacts[position].instagram
+            val x = arrContacts[position].x
+            val linkedin = arrContacts[position].linkedin
+
+
+            var shareText = "$name \n"
+            if(number!!.isNotEmpty()){
+                shareText = shareText + "Number: $number \n"
+            }
+
+            if(email!!.isNotEmpty()){
+                shareText = shareText + "Email: $email \n"
+            }
+
+            if(instagram!!.isNotEmpty()){
+                shareText = shareText + "Instagram: instagram.com/$instagram \n"
+            }
+
+            if(x!!.isNotEmpty()){
+                shareText = shareText + "X: x.com/$x \n"
+            }
+
+            if(linkedin!!.isNotEmpty()){
+                shareText = shareText + "LinkedIn: linkedin.com/in/$linkedin"
+            }
+
+
+
+
+
+            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, shareText)
+            }
+
+            holder.itemView.context.startActivity(Intent.createChooser(shareIntent, "Share via"))
+        }
+
     }
 
     private fun iconVisibilityControls(holder: ViewHolder, position: Int) {
