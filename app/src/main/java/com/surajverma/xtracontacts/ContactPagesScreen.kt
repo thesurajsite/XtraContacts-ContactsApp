@@ -1,16 +1,10 @@
-package com.surajverma.xtracontacts.ContactPage
+package com.surajverma.xtracontacts.screens
 
-import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import android.os.Vibrator
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import android.app.Activity
-import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -20,13 +14,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -34,69 +26,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
-import com.surajverma.xtracontacts.DiscoverPages.DiscoverPageActivity
-import com.surajverma.xtracontacts.MainActivity
+import com.surajverma.xtracontacts.ContactPage.AllContactsActivity
+import com.surajverma.xtracontacts.ContactPage.ContactPageDetailsModel
+import com.surajverma.xtracontacts.ContactPage.ContactPageViewModel
 import com.surajverma.xtracontacts.R
-import com.surajverma.xtracontacts.ui.theme.XtraContactsTheme
-
-class ContactPageActivity : ComponentActivity() {
-
-    private lateinit var viewModel: ContactPageViewModel
-    private lateinit var auth: FirebaseAuth
-    private lateinit var vibrator: Vibrator
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-
-        auth = FirebaseAuth.getInstance()
-        viewModel = ViewModelProvider(this).get(ContactPageViewModel::class.java)
-        vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-
-        // Fetch contact pages
-        val userId = auth.currentUser?.uid.toString()
-        viewModel.fetchMyContactPages(userId, this)
-
-        setContent {
-            XtraContactsTheme {
-                ContactPageScreen(
-                    viewModel = viewModel,
-                    auth = auth,
-                    onCreateContactPageClick = {
-                        vibrator.vibrate(50)
-                        val intent = Intent(this, CreateContactPageActivity::class.java)
-                        startActivity(intent)
-                    },
-                    onMyContactsClick = {
-                        vibrator.vibrate(50)
-                        startActivity(Intent(this, MainActivity::class.java))
-                        finish()
-                    },
-                    onDiscoverClick = {
-                        vibrator.vibrate(50)
-                        startActivity(Intent(this, DiscoverPageActivity::class.java))
-                    },
-                    vibrator = vibrator
-                )
-            }
-        }
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ContactPageScreen(
+fun ContactPagesScreen(
     viewModel: ContactPageViewModel,
     auth: FirebaseAuth,
     onCreateContactPageClick: () -> Unit,
-    onMyContactsClick: () -> Unit,
     onDiscoverClick: () -> Unit,
     vibrator: Vibrator
 ) {
     val contactPages by viewModel.contactPages.observeAsState(emptyList())
-    val context = LocalContext.current
 
     Scaffold(
         containerColor = Color.Black,
@@ -130,8 +75,6 @@ fun ContactPageScreen(
                             modifier = Modifier.fillMaxSize(),
                             contentAlignment = Alignment.Center
                         ) {
-                            // Since we can't use Lottie in Compose easily, we'll use a placeholder
-                            // You can replace this with actual Lottie animation using lottie-compose library
                             Text(
                                 text = "🌍",
                                 fontSize = 20.sp,
@@ -145,36 +88,6 @@ fun ContactPageScreen(
                     titleContentColor = Color.White
                 )
             )
-        },
-        bottomBar = {
-            NavigationBar(
-                containerColor = Color.White
-            ) {
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.Person, contentDescription = "My Contacts") },
-                    label = { Text("My Contacts") },
-                    selected = false,
-                    onClick = onMyContactsClick,
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = Color.Black,
-                        unselectedIconColor = Color.Gray,
-                        selectedTextColor = Color.Black,
-                        unselectedTextColor = Color.Gray
-                    )
-                )
-                NavigationBarItem(
-                    icon = { Icon(Icons.Default.Person, contentDescription = "Contact Pages") },
-                    label = { Text("Contact Pages") },
-                    selected = true,
-                    onClick = { /* Already on this screen */ },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = Color.Black,
-                        unselectedIconColor = Color.Gray,
-                        selectedTextColor = Color.Black,
-                        unselectedTextColor = Color.Gray
-                    )
-                )
-            }
         },
         floatingActionButton = {
             FloatingActionButton(
@@ -278,7 +191,7 @@ fun ContactPageItem(
             // Admin crown icon - show only if current user is owner
             if (contactPage.ownerId == auth.currentUser?.uid) {
                 Icon(
-                    painter = painterResource(id = R.drawable.admin), // Replace with your admin icon
+                    painter = painterResource(id = R.drawable.admin),
                     contentDescription = "Admin",
                     tint = Color.Unspecified,
                     modifier = Modifier
@@ -327,7 +240,7 @@ fun ContactPageItem(
                         // Delete contact page
                         contactPage.pageId?.let { pageId ->
                             contactPage.ownerId?.let { ownerId ->
-                                viewModel.deleteContactPage(pageId, ownerId, context as Activity)
+                                viewModel.deleteContactPage(pageId, ownerId, context as android.app.Activity)
                             }
                         }
                     }
