@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import coil.load
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.InstallStateUpdatedListener
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     lateinit var auth: FirebaseAuth
+    val user = FirebaseAuth.getInstance().currentUser
     private lateinit var authViewModel: AuthViewModel
     private lateinit var contactViewModel: ContactViewModel
     lateinit var arrContact: ArrayList<ContactsModel>
@@ -89,11 +91,21 @@ class MainActivity : AppCompatActivity() {
         // FETCH CONTACTS
         contactViewModel.fetchAllContacts(this)
 
-
-        binding.profileButton.setOnClickListener {
+        binding.profileCardView.setOnClickListener {
             vibrator.vibrate(50)
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
+        }
+
+
+        if (user != null) {
+            val profileImageUrl = user.photoUrl?.toString()
+            if (!profileImageUrl.isNullOrEmpty()) {
+                binding.profileImage.load(profileImageUrl) {
+                    placeholder(R.drawable.person)
+                    error(R.drawable.person)
+                }
+            }
         }
 
 
@@ -116,8 +128,6 @@ class MainActivity : AppCompatActivity() {
 
 
     }
-
-
 
     private val installStateUpdateListener= InstallStateUpdatedListener{ state->
         if(state.installStatus()== InstallStatus.DOWNLOADED){
@@ -152,6 +162,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+
+        contactViewModel.fetchAllContacts(this)
+
         if(updateType==AppUpdateType.IMMEDIATE){
             appUpdateManager.appUpdateInfo.addOnSuccessListener { info->
                 if(info.updateAvailability()==UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS){

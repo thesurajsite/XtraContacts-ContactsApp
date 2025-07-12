@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.storage.CacheResetOnProcessCanceled.enabled
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
@@ -58,16 +56,19 @@ dependencies {
     // viewmodel
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
     // FireStore
-    implementation ("com.google.firebase:firebase-auth:23.0.0")
+    implementation ("com.google.firebase:firebase-auth:23.2.1")
     implementation ("com.google.firebase:firebase-core:21.1.1")
-    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
-    implementation("com.google.firebase:firebase-firestore:25.1.1")
+    implementation(platform("com.google.firebase:firebase-bom:33.16.0"))
+    implementation("com.google.firebase:firebase-firestore:25.1.4")
     implementation("com.google.android.gms:play-services-auth:21.3.0")
 
     // in-app update
     implementation("com.google.android.play:app-update:2.1.0")
     implementation("com.google.android.play:app-update-ktx:2.1.0")
 
-    implementation("com.airbnb.android:lottie:6.3.0")
+    implementation("com.airbnb.android:lottie:6.6.6")
+
+    // coil
+    implementation("io.coil-kt:coil:2.5.0")
 
 }

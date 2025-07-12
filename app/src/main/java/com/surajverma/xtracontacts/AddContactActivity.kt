@@ -37,7 +37,11 @@ class AddContactActivity : AppCompatActivity() {
             val linkedin = binding.linkedEditText.text.toString()
 
             val contactDetails = ContactsModel("xyz", name, number, email, instagram, x, linkedin)
-            contactViewModel.createContact(contactDetails, this)
+            contactViewModel.createContact(contactDetails, this){ onSuccess->
+                if(onSuccess){
+                    finish()
+                }
+            }
         }
 
         // Setting Drawable start image to EditText

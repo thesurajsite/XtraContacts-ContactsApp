@@ -65,7 +65,6 @@ class AllContactsActivity : AppCompatActivity() {
             intent.putExtra("pageID", pageId)
             intent.putExtra("ownerId", ownerId)
             startActivity(intent)
-            finish()
         }
 
         binding.copyCardView.setOnClickListener {
@@ -73,15 +72,18 @@ class AllContactsActivity : AppCompatActivity() {
             copyPageId(this, newPageId)
         }
 
-
-
-
-
     }
 
     fun copyPageId(context: Context, text: String) {
         val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
         clipboard?.setPrimaryClip(ClipData.newPlainText("Copy Page ID", text))
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val pageId = intent.getStringExtra("pageId") ?: return
+        viewModel.fetchPageContacts(pageId, this)
     }
 
 

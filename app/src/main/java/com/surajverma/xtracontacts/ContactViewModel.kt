@@ -20,7 +20,7 @@ class ContactViewModel: ViewModel() {
     private val _contacts = MutableLiveData<List<ContactsModel>>()
     val contacts: LiveData<List<ContactsModel>> get() = _contacts
 
-    fun createContact(contactDetails: ContactsModel, activity: Activity){
+    fun createContact(contactDetails: ContactsModel, activity: Activity, onResult:(Boolean)->Unit){
         auth=FirebaseAuth.getInstance()
         val USER_ID= auth.currentUser?.uid.toString()
         val CONTACT_ID = db.collection("CONTACTS").document(USER_ID).collection("USER_CONTACTS").document().id
@@ -29,14 +29,12 @@ class ContactViewModel: ViewModel() {
         db.collection("CONTACTS").document(USER_ID).collection("USER_CONTACTS").document(CONTACT_ID).set(contactDetails)
             .addOnSuccessListener {
                 Toast.makeText(activity, "Contact Created", Toast.LENGTH_SHORT).show()
-
-                val intent =  Intent(activity, MainActivity::class.java)
-                activity.startActivity(intent)
-                activity.finish()
+                onResult(true)
 
             }
             .addOnFailureListener {
                 Toast.makeText(activity, "Some error occured creating contact", Toast.LENGTH_SHORT).show()
+                onResult(false)
             }
     }
 
@@ -71,7 +69,7 @@ class ContactViewModel: ViewModel() {
 
     }
 
-    fun updateContact(contactDetails:ContactsModel, activity: Activity){
+    fun updateContact(contactDetails:ContactsModel, activity: Activity, onResult:(Boolean)->Unit){
         auth=FirebaseAuth.getInstance()
         val USER_ID= auth.currentUser?.uid.toString()
         val CONTACT_ID = contactDetails.id!!  //  Assign ID to each Contact
@@ -79,19 +77,16 @@ class ContactViewModel: ViewModel() {
         db.collection("CONTACTS").document(USER_ID).collection("USER_CONTACTS").document(CONTACT_ID).set(contactDetails)
             .addOnSuccessListener {
                 Toast.makeText(activity, "Contact Edited", Toast.LENGTH_SHORT).show()
-
-                val intent =  Intent(activity, MainActivity::class.java)
-                activity.startActivity(intent)
-                activity.finish()
-
+                onResult(true)
             }
             .addOnFailureListener {
-                Toast.makeText(activity, "Some error occured Editing contact", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Some error occured while updating", Toast.LENGTH_SHORT).show()
+                onResult(false)
             }
 
     }
 
-    fun deleteContact(contactID: String, activity: Activity){
+    fun deleteContact(contactID: String, activity: Activity, onResult: (Boolean)-> Unit){
         auth=FirebaseAuth.getInstance()
         val USER_ID= auth.currentUser?.uid.toString()
         val CONTACT_ID = contactID  //  Assign ID to each Contact
@@ -99,14 +94,12 @@ class ContactViewModel: ViewModel() {
         db.collection("CONTACTS").document(USER_ID).collection("USER_CONTACTS").document(CONTACT_ID).delete()
             .addOnSuccessListener {
                 Toast.makeText(activity, "Contact Deleted", Toast.LENGTH_SHORT).show()
-
-                val intent =  Intent(activity, MainActivity::class.java)
-                activity.startActivity(intent)
-                activity.finish()
+                onResult(true)
 
             }
             .addOnFailureListener {
                 Toast.makeText(activity, "Some error occured Deleting contact", Toast.LENGTH_SHORT).show()
+                onResult(false)
             }
 
     }

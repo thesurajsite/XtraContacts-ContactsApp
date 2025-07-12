@@ -157,9 +157,7 @@ class ContactPageViewModel: ViewModel() {
     }
 
 
-
-
-    fun createContacts(contactDetails: ContactsModel, userId: String, activity: Activity){
+    fun createContacts(contactDetails: ContactsModel, userId: String, activity: Activity, onResult:(Boolean)->Unit){
 
         if(contactDetails.ownerId == userId){
 
@@ -168,15 +166,10 @@ class ContactPageViewModel: ViewModel() {
             db.collection("CONTACT_PAGE").document(contactDetails.pageId!!).set(mapOf("ContactsList" to FieldValue.arrayUnion(contactDetails)), SetOptions.merge())
                 .addOnSuccessListener {
                     Toast.makeText(activity, "Contact Created", Toast.LENGTH_SHORT).show()
-                    val intent =  Intent(activity, AllContactsActivity::class.java)
-                    intent.putExtra("pageName", contactDetails.pageName)
-                    intent.putExtra("pageId", contactDetails.pageId)
-                    intent.putExtra("ownerId", contactDetails.ownerId)
-                   // Toast.makeText(activity, "${contactDetails.pageId}", Toast.LENGTH_SHORT).show()
-                    activity.startActivity(intent)
-                    activity.finish()
+                    onResult(true)
                 }
                 .addOnFailureListener {
+                    onResult(false)
                     Toast.makeText(activity, "Some error Occured", Toast.LENGTH_SHORT).show()
                 }
         }
@@ -223,26 +216,22 @@ class ContactPageViewModel: ViewModel() {
             }
     }
 
-    fun deletePageContact(contactDetails: ContactsModel, activity: Activity) {
+    fun deletePageContact(contactDetails: ContactsModel, activity: Activity, onResult:(Boolean)->Unit) {
         val db = FirebaseFirestore.getInstance()
 
         db.collection("CONTACT_PAGE").document(contactDetails.pageId!!)
             .update("ContactsList", FieldValue.arrayRemove(contactDetails))
             .addOnSuccessListener {
                 Toast.makeText(activity, "Contact Deleted", Toast.LENGTH_SHORT).show()
-                val intent = Intent(activity, AllContactsActivity::class.java)
-                intent.putExtra("pageID", contactDetails.pageId)
-                intent.putExtra("ownerId", contactDetails.ownerId)
-                intent.putExtra("pageName", contactDetails.pageName)
-                activity.startActivity(intent)
-                activity.finish()
+                onResult(true)
             }
             .addOnFailureListener {
                 Toast.makeText(activity, "Failed to delete contact", Toast.LENGTH_SHORT).show()
+                onResult(false)
             }
     }
 
-    fun updateContact(contactDetails: ContactsModel, activity: Activity) {
+    fun updateContact(contactDetails: ContactsModel, activity: Activity, onResult:(Boolean)-> Unit) {
         val contactRef = db.collection("CONTACT_PAGE").document(contactDetails.pageId!!)
 
         contactRef.get().addOnSuccessListener { document ->
@@ -257,28 +246,28 @@ class ContactPageViewModel: ViewModel() {
                             contactRef.update("ContactsList", FieldValue.arrayUnion(contactDetails))
                                 .addOnSuccessListener {
                                     Toast.makeText(activity, "Contact Updated", Toast.LENGTH_SHORT).show()
-                                    val intent = Intent(activity, AllContactsActivity::class.java)
-                                    intent.putExtra("pageId", contactDetails.pageId)
-                                    intent.putExtra("ownerId", contactDetails.ownerId)
-                                    intent.putExtra("pageName", contactDetails.pageName)
-                                    activity.startActivity(intent)
-                                    activity.finish()
+                                    onResult(true)
                                 }
                                 .addOnFailureListener {
                                     Toast.makeText(activity, "Error Updating Contact", Toast.LENGTH_SHORT).show()
+                                    onResult(false)
                                 }
                         }
                         .addOnFailureListener {
                             Toast.makeText(activity, "Some Error Occured", Toast.LENGTH_SHORT).show()
+                            onResult(false)
                         }
                 } else {
                     Toast.makeText(activity, "Contact Not Found", Toast.LENGTH_SHORT).show()
+                    onResult(false)
                 }
             } else {
                 Toast.makeText(activity, "Page Not Found", Toast.LENGTH_SHORT).show()
+                onResult(false)
             }
         }.addOnFailureListener {
             Toast.makeText(activity, "Error Fetching Data", Toast.LENGTH_SHORT).show()
+            onResult(false)
         }
     }
 

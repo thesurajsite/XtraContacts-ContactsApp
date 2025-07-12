@@ -45,7 +45,11 @@ class CreateContactForContactPageActivity : AppCompatActivity() {
 
             if(name.isNotEmpty()){
                 val contactDetails = ContactsModel("", name, number, email, instagram, x, linkedin, pageName, pageID, ownerId)
-                viewModel.createContacts(contactDetails, userId, this)
+                viewModel.createContacts(contactDetails, userId, this){  isSuccess->
+                    if(isSuccess){
+                        finish()
+                    }
+                }
             }else{
                 Toast.makeText(this, "Please Enter Name", Toast.LENGTH_SHORT).show()
 

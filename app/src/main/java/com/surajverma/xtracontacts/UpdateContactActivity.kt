@@ -45,9 +45,9 @@ class UpdateContactActivity : AppCompatActivity() {
         val instagram = intent.getStringExtra("instagram")
         val x = intent.getStringExtra("x")
         val linkedin = intent.getStringExtra("linkedin")
-        val pageName = intent.getStringExtra("pageName")
-        val pageId = intent.getStringExtra("pageId")
-        val ownerId = intent.getStringExtra("ownerId")
+        val pageName = intent.getStringExtra("pageName") // for contact page only
+        val pageId = intent.getStringExtra("pageId") // for contact page only
+        val ownerId = intent.getStringExtra("ownerId") // for contact page only
 
         val isContactPage = intent.getBooleanExtra("isContactPage", false)
 
@@ -104,7 +104,11 @@ class UpdateContactActivity : AppCompatActivity() {
             binding.saveButton.visibility = View.VISIBLE
 
             binding.deleteButton.setOnClickListener {
-                contactPageViewModel.deletePageContact(contactDetails, this)
+                contactPageViewModel.deletePageContact(contactDetails, this){ onSuccess->
+                    if(onSuccess){
+                        finish()
+                    }
+                }
             }
 
             binding.saveButton.setOnClickListener {
@@ -117,7 +121,11 @@ class UpdateContactActivity : AppCompatActivity() {
                 val linkedin = binding.linkedEditText.text.toString()
 
                 val contactDetails =  ContactsModel(id, name, number, email, instagram, x, linkedin, pageName, pageId, ownerId)
-                contactPageViewModel.updateContact(contactDetails, this)
+                contactPageViewModel.updateContact(contactDetails, this){ onSuccess->
+                    if(onSuccess){
+                        finish()
+                    }
+                }
 
             }
         }
@@ -129,7 +137,11 @@ class UpdateContactActivity : AppCompatActivity() {
             // Not Contact Page
             binding.deleteButton.setOnClickListener {
                 val id = intent.getStringExtra("id")
-                contactViewModel.deleteContact(id!!, this)
+                contactViewModel.deleteContact(id!!, this){ onSuccess->
+                    if(onSuccess){
+                        finish()
+                    }
+                }
             }
 
             binding.saveButton.setOnClickListener {
@@ -142,7 +154,11 @@ class UpdateContactActivity : AppCompatActivity() {
                 val linkedin = binding.linkedEditText.text.toString()
 
                 val contactDetails =  ContactsModel(id, name, number, email, instagram, x, linkedin)
-                contactViewModel.updateContact(contactDetails, this)
+                contactViewModel.updateContact(contactDetails, this){ onSuccess ->
+                    if(onSuccess){
+                        finish()
+                    }
+                }
             }
         }
 
