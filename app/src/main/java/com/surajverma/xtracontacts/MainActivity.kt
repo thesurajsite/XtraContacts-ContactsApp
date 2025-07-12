@@ -22,6 +22,7 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
 import com.google.android.play.core.ktx.isImmediateUpdateAllowed
 import com.google.firebase.auth.FirebaseAuth
+import com.surajverma.xtracontacts.Authentication.AuthViewModel
 import com.surajverma.xtracontacts.ContactPage.ContactPageActivity
 import com.surajverma.xtracontacts.ContactPage.ContactPageDetailsModel
 import com.surajverma.xtracontacts.databinding.ActivityMainBinding

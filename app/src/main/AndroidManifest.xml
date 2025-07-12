@@ -39,10 +39,10 @@
       android:name=".AddContactActivity"
       android:exported="false" />
     <activity
-      android:name=".LoginActivity"
+      android:name=".Authentication.LoginActivity"
       android:exported="false" />
     <activity
-      android:name=".SignupActivity"
+      android:name=".Authentication.SignupActivity"
       android:exported="false" />
     <activity
       android:name=".MainActivity"

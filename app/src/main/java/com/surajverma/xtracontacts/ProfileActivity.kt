@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.auth.FirebaseAuth
+import com.surajverma.xtracontacts.Authentication.LoginActivity
 import com.surajverma.xtracontacts.databinding.ActivityProfileBinding
 
 class ProfileActivity : AppCompatActivity() {

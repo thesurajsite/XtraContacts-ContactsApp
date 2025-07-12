@@ -1,18 +1,18 @@
-package com.surajverma.xtracontacts
+package com.surajverma.xtracontacts.Authentication
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.surajverma.xtracontacts.MainActivity
 
 class AuthViewModel() : ViewModel() {
 
     lateinit var auth: FirebaseAuth
 
     fun checkLogin(activity: Activity){
-        auth=FirebaseAuth.getInstance()
+        auth= FirebaseAuth.getInstance()
         if(auth.currentUser == null){
             val intent = Intent(activity, LoginActivity::class.java)
             activity.startActivity(intent)
@@ -21,7 +21,7 @@ class AuthViewModel() : ViewModel() {
     }
 
     fun userLogin(email: String, password: String, activity: Activity){
-        auth=FirebaseAuth.getInstance()
+        auth= FirebaseAuth.getInstance()
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
             if(it.isSuccessful){
                 Toast.makeText(activity, "Logged In Successfully", Toast.LENGTH_SHORT).show()
@@ -36,7 +36,7 @@ class AuthViewModel() : ViewModel() {
     }
 
     fun userSignup(email: String, password: String, activity: Activity){
-        auth=FirebaseAuth.getInstance()
+        auth= FirebaseAuth.getInstance()
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
             if(it.isSuccessful){
                 Toast.makeText(activity, "Account Created Successfully", Toast.LENGTH_SHORT).show()
