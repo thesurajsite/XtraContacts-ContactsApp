@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import coil.load
 import com.google.firebase.auth.FirebaseAuth
 import com.surajverma.xtracontacts.Authentication.LoginActivity
 import com.surajverma.xtracontacts.databinding.ActivityProfileBinding
@@ -17,6 +18,7 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var vibrator: Vibrator
+    val user = FirebaseAuth.getInstance().currentUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +37,21 @@ class ProfileActivity : AppCompatActivity() {
             }
             startActivity(intent)
             finish()
+        }
+
+        if (user != null) {
+            val profileImageUrl = user.photoUrl?.toString()
+            if (!profileImageUrl.isNullOrEmpty()) {
+                binding.profileImage.load(profileImageUrl) {
+                    placeholder(R.drawable.person)
+                    error(R.drawable.person)
+                }
+            }
+        }
+
+        if(user!=null){
+            val email = user.email
+            binding.emailTextView.text=email
         }
 
     }
