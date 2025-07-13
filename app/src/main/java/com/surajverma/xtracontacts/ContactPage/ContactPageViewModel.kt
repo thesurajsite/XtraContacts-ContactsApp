@@ -33,11 +33,6 @@ class ContactPageViewModel: ViewModel() {
     val contacts: LiveData<List<ContactsModel>> get() = _contacts
 
     fun createContactsPage(pageName: String, ownerId: String, activity: Activity){
-//        val pageDetails = mapOf(
-//            "pageName" to pageName,
-//            "pageId" to pageId,
-//            "ownerId" to ownerId
-//        )
 
         val pageId = db.collection("CONTACT_PAGE").document().id
         val pageDetails = ContactPageDetailsModel(pageName, pageId, ownerId)

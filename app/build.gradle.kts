@@ -72,4 +72,7 @@ dependencies {
     // coil
     implementation("io.coil-kt:coil:2.5.0")
 
+    //SDP
+    implementation ("com.intuit.sdp:sdp-android:1.1.1")
+
 }
