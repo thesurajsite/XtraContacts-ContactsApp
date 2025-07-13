@@ -86,12 +86,12 @@ class ContactPageViewModel: ViewModel() {
     fun fetchMyContactPages(userId: String, activity: Activity) {
         val userDocRef = db.collection("MY_CONTACT_PAGES").document(userId)
 
+        val contactPageList = mutableListOf<ContactPageDetailsModel>()
         userDocRef.get().addOnSuccessListener { document ->
             if (document.exists()) {
                 val pageIdList = document.get("ContactPages") as? List<String> ?: emptyList()
 
                 if (pageIdList.isNotEmpty()) {
-                    val contactPageList = mutableListOf<ContactPageDetailsModel>()
                     val validPageIds = mutableListOf<String>()
                     var processedCount = 0
 
@@ -131,13 +131,19 @@ class ContactPageViewModel: ViewModel() {
                     }
                 } else {
                     Toast.makeText(activity, "No Contact Pages found", Toast.LENGTH_SHORT).show()
+                    _contactPages.value = contactPageList
+
                 }
             } else {
                 Toast.makeText(activity, "You have no Contact Pages", Toast.LENGTH_SHORT).show()
+                _contactPages.value = contactPageList
             }
         }.addOnFailureListener {
             Toast.makeText(activity, "Error fetching pages", Toast.LENGTH_SHORT).show()
+            _contactPages.value = contactPageList
         }
+
+
     }
 
     /** Remove deleted page IDs from MY_CONTACT_PAGES */

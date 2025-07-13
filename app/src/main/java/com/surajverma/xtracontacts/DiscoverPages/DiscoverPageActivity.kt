@@ -29,12 +29,12 @@ class DiscoverPageActivity : AppCompatActivity() {
     binding.recyclerView.layoutManager = GridLayoutManager(this, 2)
     binding.recyclerView.adapter = recyclerAdapter
 
-    arrDiscoverPageList.add(DiscoverPageDataClass("Page 1", "fghj", "rtygdvhbj"))
-    arrDiscoverPageList.add(DiscoverPageDataClass("Page 1", "fghj", "rtygdvhbj"))
-    arrDiscoverPageList.add(DiscoverPageDataClass("Page 1", "fghj", "rtygdvhbj"))
-    arrDiscoverPageList.add(DiscoverPageDataClass("Page 1", "fghj", "rtygdvhbj"))
-    arrDiscoverPageList.add(DiscoverPageDataClass("Page 1", "fghj", "rtygdvhbj"))
-    arrDiscoverPageList.add(DiscoverPageDataClass("Page 1", "fghj", "rtygdvhbj"))
+//    arrDiscoverPageList.add(DiscoverPageDataClass("Page 1", "fghj", "rtygdvhbj"))
+//    arrDiscoverPageList.add(DiscoverPageDataClass("Page 1", "fghj", "rtygdvhbj"))
+//    arrDiscoverPageList.add(DiscoverPageDataClass("Page 1", "fghj", "rtygdvhbj"))
+//    arrDiscoverPageList.add(DiscoverPageDataClass("Page 1", "fghj", "rtygdvhbj"))
+//    arrDiscoverPageList.add(DiscoverPageDataClass("Page 1", "fghj", "rtygdvhbj"))
+//    arrDiscoverPageList.add(DiscoverPageDataClass("Page 1", "fghj", "rtygdvhbj"))
 
     recyclerAdapter.notifyDataSetChanged()
 
