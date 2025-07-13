@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Vibrator
 import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -29,6 +30,8 @@ class AllContactsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAllContactsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
         val auth = FirebaseAuth.getInstance()
         val userId = auth.currentUser?.uid.toString()
@@ -67,7 +70,8 @@ class AllContactsActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.copyCardView.setOnClickListener {
+        binding.copyIdCardView.setOnClickListener {
+            vibrator.vibrate(50)
             val newPageId = "https://"+pageId+".xtra"
             copyPageId(this, newPageId)
         }
