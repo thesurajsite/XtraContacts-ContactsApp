@@ -21,7 +21,8 @@ class ContactPageActivity : AppCompatActivity() {
     private lateinit var  binding: ActivityContactPageBinding
     private lateinit var arrContactPage: ArrayList<ContactPageDetailsModel>
     private lateinit var viewModel: ContactPageViewModel
-    private lateinit var auth: FirebaseAuth
+    private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
+    val userId=auth.currentUser?.uid.toString()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,8 +31,6 @@ class ContactPageActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         arrContactPage= ArrayList()
-        auth= FirebaseAuth.getInstance()
-        val userId=auth.currentUser?.uid.toString()
         viewModel= ViewModelProvider(this).get(ContactPageViewModel::class.java)
         val vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
         val earthAnimation = findViewById<LottieAnimationView>(R.id.earthAnimation)
@@ -81,5 +80,10 @@ class ContactPageActivity : AppCompatActivity() {
             startActivity(Intent(this, DiscoverPageActivity::class.java))
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchMyContactPages(userId, this)
     }
 }

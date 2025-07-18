@@ -67,7 +67,7 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        binding.googleCardView.setOnClickListener {
+        binding.googleLoginButton.setOnClickListener {
             vibrator.vibrate(50)
             googleSignInClient.signOut()
             startActivityForResult(googleSignInClient.signInIntent, 123)

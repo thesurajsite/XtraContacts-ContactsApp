@@ -5,5 +5,6 @@
     <color name="red">#D00202</color>
 
     <color name="color_primary">#FF0d</color>
+    <color name="admin_card_color">#FFF59D</color>
     <color name="bottom_navigation_selected_color">#314BDB</color>
 </resources>

@@ -20,6 +20,7 @@ class DiscoverPagesViewModel() : ViewModel() {
     var auth = FirebaseAuth.getInstance()
     private val db: FirebaseFirestore by lazy { Firebase.firestore}
     val userID = auth.currentUser?.uid
+    val userEmail = FirebaseAuth.getInstance().currentUser?.email.toString()
 
     private val _contactPages = MutableLiveData<List<DiscoverPageDataClass>>()
     val contactPages: LiveData<List<DiscoverPageDataClass>> get() = _contactPages
@@ -66,7 +67,7 @@ class DiscoverPagesViewModel() : ViewModel() {
     fun RemovePage(pageDetails: DiscoverPageDataClass, context: Context, onResult:(Boolean)->Unit){
         val pageId = pageDetails.pageId
         val ownerId = pageDetails.ownerId
-        if(userID==ownerId){
+        if(userID==ownerId || userEmail.equals("thesurajsite@gmail.com") || userEmail.equals("xtracontacts@gmail.com")){
 
             val builder = AlertDialog.Builder(context)
                 .setTitle("Remove Page")

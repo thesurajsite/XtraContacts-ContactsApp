@@ -32,7 +32,7 @@ class ContactPageViewModel: ViewModel() {
     private val _contacts = MutableLiveData<List<ContactsModel>>()
     val contacts: LiveData<List<ContactsModel>> get() = _contacts
 
-    fun createContactsPage(pageName: String, ownerId: String, activity: Activity){
+    fun createContactsPage(pageName: String, ownerId: String, activity: Activity, onSuccess: (Boolean)-> Unit){
 
         val pageId = db.collection("CONTACT_PAGE").document().id
         val pageDetails = ContactPageDetailsModel(pageName, pageId, ownerId)
@@ -40,12 +40,11 @@ class ContactPageViewModel: ViewModel() {
         db.collection("CONTACT_PAGE").document(pageId).set(pageDetails)
             .addOnSuccessListener {
                 Toast.makeText(activity, "Page Created", Toast.LENGTH_SHORT).show()
-                val intent = Intent(activity, ContactPageActivity::class.java)
-                activity.startActivity(intent)
-                activity.finish()
+                onSuccess(true)
             }
             .addOnFailureListener {
                 Toast.makeText(activity, "Some error occurred creating page", Toast.LENGTH_SHORT).show()
+                onSuccess(false)
             }
 
         // Add Page to: My Contact Pages
@@ -61,17 +60,16 @@ class ContactPageViewModel: ViewModel() {
 
     }
 
-    fun addContactPage(pageId: String, userId: String ,activity: Activity){
+    fun addContactPage(pageId: String, userId: String ,activity: Activity, onSuccess: (Boolean)-> Unit){
         val cleanPageId = cleanPageId(pageId)  // Removes https:// & .xtra from the pageId
         db.collection("MY_CONTACT_PAGES").document(userId) .set(mapOf("ContactPages" to FieldValue.arrayUnion(cleanPageId)), SetOptions.merge())
             .addOnSuccessListener {
                 Toast.makeText(activity, "Page Added", Toast.LENGTH_SHORT).show()
-                val intent = Intent(activity, ContactPageActivity::class.java)
-                activity.startActivity(intent)
-                activity.finish()
+                onSuccess(true)
             }
             .addOnFailureListener {
                 Toast.makeText(activity, "Some Error Occured", Toast.LENGTH_SHORT).show()
+                onSuccess(false)
             }
 
     }

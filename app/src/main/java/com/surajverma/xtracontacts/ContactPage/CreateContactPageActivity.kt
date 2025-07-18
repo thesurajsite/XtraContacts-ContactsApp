@@ -33,7 +33,11 @@ class CreateContactPageActivity : AppCompatActivity() {
            val pageName = binding.contactsPageName.text.toString()
            val userId = auth.currentUser?.uid.toString()
            if(pageName.isNotEmpty()){
-               viewModel.createContactsPage(pageName, userId, this)
+               viewModel.createContactsPage(pageName, userId, this){ onSuccess->
+                   if(onSuccess){
+                       finish()
+                   }
+               }
            }else{
                Toast.makeText(this, "Enter Page Name", Toast.LENGTH_SHORT).show()
            }
@@ -43,7 +47,11 @@ class CreateContactPageActivity : AppCompatActivity() {
             vibrator.vibrate(50)
             if(binding.contactsPageId.text.toString().isNotEmpty()){
                 val pageId = binding.contactsPageId.text.toString()
-                viewModel.addContactPage(pageId, userId, this)
+                viewModel.addContactPage(pageId, userId, this){ onSuccess->
+                    if(onSuccess){
+                        finish()
+                    }
+                }
             }
             else{
                 Toast.makeText(this, "Enter Page ID", Toast.LENGTH_SHORT).show()

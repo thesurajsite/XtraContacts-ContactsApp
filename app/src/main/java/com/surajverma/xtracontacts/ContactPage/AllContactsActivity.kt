@@ -48,13 +48,19 @@ class AllContactsActivity : AppCompatActivity() {
         val recyclerAdapter= RecyclerContactAdapter(this, arrContacts, true)
         binding.recyclerView.adapter = recyclerAdapter
 
-
         viewModel.fetchPageContacts(pageId!!, this)
-        viewModel.contacts.observe(this, Observer {
+        viewModel.contacts.observe(this, Observer { contactList ->
+            val sortedList = contactList.sortedWith(
+                compareByDescending<ContactsModel> {
+                    it.name.equals("Admin", ignoreCase = true)
+                }
+            )
+
             arrContacts.clear()
-            arrContacts.addAll(it)
+            arrContacts.addAll(sortedList)
             recyclerAdapter.notifyDataSetChanged()
         })
+
 
         if(ownerId == userId){
             binding.floatingActionButton.visibility = View.VISIBLE

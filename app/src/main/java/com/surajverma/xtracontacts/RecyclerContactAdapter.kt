@@ -3,6 +3,7 @@ package com.surajverma.xtracontacts
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.net.Uri
 import android.os.Vibrator
 import android.view.LayoutInflater
@@ -13,7 +14,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
 import com.surajverma.xtracontacts.ContactPage.ContactPageDetailsModel
 import java.util.ArrayList
 
@@ -27,7 +30,7 @@ class RecyclerContactAdapter(
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var txtName: TextView = itemView.findViewById(R.id.txtName)
         var txtNumber: TextView = itemView.findViewById(R.id.txtNumber)
-        var cardView: CardView = itemView.findViewById(R.id.cardView)
+        var cardView: MaterialCardView = itemView.findViewById(R.id.cardView)
         var linear: LinearLayout = itemView.findViewById(R.id.linear)
         var editButton: ImageView = itemView.findViewById(R.id.editButton)
         var callButton: ImageView = itemView.findViewById(R.id.callButton)
@@ -245,9 +248,6 @@ class RecyclerContactAdapter(
             if(linkedin!!.isNotEmpty()){
                 shareText = shareText + "LinkedIn: linkedin.com/in/$linkedin"
             }
-
-
-
 
 
             val shareIntent = Intent(Intent.ACTION_SEND).apply {
