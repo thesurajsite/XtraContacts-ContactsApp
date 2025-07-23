@@ -1,27 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/contactCardLayout"
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
-  android:backgroundTint="@color/white"
-  android:id="@+id/contactCardLayout"
-  app:cardCornerRadius="10dp"
   android:layout_marginTop="5dp"
   android:layout_marginLeft="5dp"
-  android:layout_marginRight="5dp">
+  android:layout_marginRight="5dp"
+  app:cardCornerRadius="10dp"
+  app:cardElevation="2dp"
+  android:backgroundTint="@color/white">
 
-  <LinearLayout
+  <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:backgroundTint="@color/white"
-    android:layout_marginLeft="10dp"
-    app:cardCornerRadius="3dp">
+    android:padding="10dp">
 
+    <!-- Left image inside circular card -->
     <androidx.cardview.widget.CardView
+      android:id="@+id/imageCard"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       app:cardCornerRadius="100dp"
-      android:layout_margin="5dp">
+      android:layout_marginEnd="8dp"
+      app:cardElevation="4dp"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent">
 
       <ImageView
         android:id="@+id/imgContact"
@@ -29,37 +34,35 @@
         android:layout_height="50dp"
         android:src="@drawable/contact_page"
         android:padding="12dp"
-        android:background="@color/black"/>
+        android:background="@color/black" />
     </androidx.cardview.widget.CardView>
 
-    <LinearLayout
-      android:layout_gravity="center_vertical"
-      android:layout_width="wrap_content"
+    <TextView
+      android:id="@+id/pageName"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:layout_marginLeft="5dp"
-      android:orientation="vertical">
+      android:text="Page Name"
+      android:textColor="@color/black"
+      android:textSize="20sp"
+      android:layout_marginLeft="@dimen/_10sdp"
+      app:layout_constraintStart_toEndOf="@id/imageCard"
+      app:layout_constraintTop_toTopOf="@id/imageCard"
+      app:layout_constraintBottom_toBottomOf="@id/imageCard"
+      app:layout_constraintEnd_toStartOf="@id/adminImageView" />
 
-      <TextView
-        android:id="@+id/pageName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Page Name"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
-
-    </LinearLayout>
-
+    <!-- Admin icon fixed to the right -->
     <ImageView
       android:id="@+id/adminImageView"
-      android:visibility="visible"
       android:layout_width="40dp"
       android:layout_height="40dp"
       android:src="@drawable/admin"
-      android:layout_gravity="center_vertical"
-      android:layout_marginLeft="30dp"
-      />
+      android:visibility="visible"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="@id/imageCard"
+      app:layout_constraintBottom_toBottomOf="@id/imageCard"
+      android:layout_marginStart="8dp"
+      android:layout_marginEnd="4dp" />
 
-  </LinearLayout>
-
+  </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

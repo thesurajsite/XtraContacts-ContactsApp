@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.surajverma.xtracontacts.Authentication.AuthViewModel
 import com.surajverma.xtracontacts.ContactPage.ContactPageActivity
 import com.surajverma.xtracontacts.ContactPage.ContactPageDetailsModel
+import com.surajverma.xtracontacts.Updater.AppUpdater
 import com.surajverma.xtracontacts.databinding.ActivityMainBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var contactViewModel: ContactViewModel
     lateinit var arrContact: ArrayList<ContactsModel>
     private lateinit var vibrator: Vibrator
+    private lateinit var appUpdater: AppUpdater
 
     private lateinit var appUpdateManager: AppUpdateManager
     private val updateType= AppUpdateType.FLEXIBLE
@@ -51,12 +53,11 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(binding.root)
 
-        appUpdateManager= AppUpdateManagerFactory.create(applicationContext)
-        if(updateType==AppUpdateType.FLEXIBLE){
-            appUpdateManager.registerListener(installStateUpdateListener)
-        }
+        // App Updater
+        appUpdater = AppUpdater(this, lifecycleScope, AppUpdateType.FLEXIBLE, UPDATE_CODE)
+        appUpdater.registerListener()
+        appUpdater.checkForAppUpdate()
 
-        checkForAppUpdate()
 
         auth=FirebaseAuth.getInstance()
         authViewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
@@ -130,72 +131,24 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private val installStateUpdateListener= InstallStateUpdatedListener{ state->
-        if(state.installStatus()== InstallStatus.DOWNLOADED){
-            Toast.makeText(applicationContext, "Update Successful, Restarting in 5 Seconds", Toast.LENGTH_LONG).show()
-        }
-        lifecycleScope.launch {
-            delay(5.seconds)
-            appUpdateManager.completeUpdate()
-        }
-    }
-
-    private fun checkForAppUpdate(){
-        appUpdateManager.appUpdateInfo.addOnSuccessListener { info->
-            val isUpdateAvailable=info.updateAvailability()== UpdateAvailability.UPDATE_AVAILABLE
-            val isUpdateAllowed=when(updateType){
-                AppUpdateType.FLEXIBLE->info.isFlexibleUpdateAllowed
-                AppUpdateType.IMMEDIATE->info.isImmediateUpdateAllowed
-                else-> false
-            }
-
-            if(isUpdateAvailable && isUpdateAllowed){
-                appUpdateManager.startUpdateFlowForResult(
-                    info,
-                    updateType,
-                    this,
-                    UPDATE_CODE
-                )
-            }
-
-        }
-    }
-
     override fun onResume() {
         super.onResume()
-
         contactViewModel.fetchAllContacts(this)
+        appUpdater.resumeUpdateIfNeeded()
 
-        if(updateType==AppUpdateType.IMMEDIATE){
-            appUpdateManager.appUpdateInfo.addOnSuccessListener { info->
-                if(info.updateAvailability()==UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS){
-                    appUpdateManager.startUpdateFlowForResult(
-                        info,
-                        updateType,
-                        this,
-                        UPDATE_CODE
-                    )
-                }
-
-            }
-        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(resultCode==UPDATE_CODE){
-            if(resultCode!= RESULT_OK){
-                println("Somerthing went wrong while updating...")
+        if (appUpdater.isUpdateRequest(requestCode)) {
+            if (resultCode != RESULT_OK) {
+                println("Something went wrong while updating...")
             }
         }
-
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if(updateType==AppUpdateType.FLEXIBLE){
-            appUpdateManager.unregisterListener(installStateUpdateListener)
-        }
-
+        appUpdater.unregisterListener()
     }
 }
