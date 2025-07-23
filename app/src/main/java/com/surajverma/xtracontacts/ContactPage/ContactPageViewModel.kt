@@ -206,8 +206,8 @@ class ContactPageViewModel: ViewModel() {
                         }
 
                         contactsList.sortBy { it.name!!.lowercase() }
-                        _contacts.value = contactsList
                     }
+                    _contacts.value = contactsList // update the list even if its empty
                 }
             }
             .addOnFailureListener {
@@ -273,7 +273,7 @@ class ContactPageViewModel: ViewModel() {
 
 
 
-    fun deleteContactPage(pageId: String, ownerId: String, activity: Activity){
+    fun deleteContactPage(pageId: String, ownerId: String, activity: Activity, onSuccess: (Boolean) -> Unit){
 
         val userId = auth.currentUser?.uid.toString()
 
@@ -287,50 +287,54 @@ class ContactPageViewModel: ViewModel() {
                 try {
 
                     if(ownerId == userId){
-                        deleteContactPageForAll(pageId, activity)
+                        deleteContactPageForAll(pageId, activity){ isComplete->
+                            onSuccess(isComplete)
+                        }
                     }
                     else{
-                        deleteContactPageForMe(pageId, userId, activity)
+                        deleteContactPageForMe(pageId, userId, activity){ isComplete->
+                            onSuccess(isComplete)
+                        }
                     }
 
 
                 } catch (e: Exception) {
                     Toast.makeText(activity, "Something Went Wrong", Toast.LENGTH_SHORT).show()
                     Log.w("crash-attendance", e)
+                    onSuccess(false)
                 }
 
             }.setNegativeButton("NO")
             { dialogInterface, i ->
                 Toast.makeText(activity, "Deletion Cancelled", Toast.LENGTH_SHORT).show()
+                onSuccess(false)
             }
         builder.show()
     }
 
-    fun deleteContactPageForAll(pageId: String, activity: Activity){
+    fun deleteContactPageForAll(pageId: String, activity: Activity, onSuccess: (Boolean) -> Unit){
         db.collection("CONTACT_PAGE").document(pageId).delete()
             .addOnSuccessListener {
                 Toast.makeText(activity, "Page Deleted for Everyone", Toast.LENGTH_SHORT).show()
-                val intent = Intent(activity, ContactPageActivity::class.java)
-                activity.startActivity(intent)
-                activity.finish()
+                onSuccess(true)
             }
             .addOnFailureListener {
                 Toast.makeText(activity, "Couldn't Delete Page", Toast.LENGTH_SHORT).show()
+                onSuccess(false)
             }
 
     }
 
-    fun deleteContactPageForMe(pageId: String, userId: String, activity: Activity) {
+    fun deleteContactPageForMe(pageId: String, userId: String, activity: Activity, onSuccess: (Boolean) -> Unit) {
         db.collection("MY_CONTACT_PAGES").document(userId)
             .update("ContactPages", FieldValue.arrayRemove(pageId))
             .addOnSuccessListener {
                 Toast.makeText(activity, "Page Deleted", Toast.LENGTH_SHORT).show()
-                val intent = Intent(activity, ContactPageActivity::class.java)
-                activity.startActivity(intent)
-                activity.finish()
+                onSuccess(true)
             }
             .addOnFailureListener {
                 Toast.makeText(activity, "Some Error Occurred", Toast.LENGTH_SHORT).show()
+                onSuccess(false)
             }
     }
 

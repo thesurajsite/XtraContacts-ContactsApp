@@ -9,6 +9,18 @@
   android:layout_height="match_parent"
   tools:context=".ContactPage.AllContactsActivity">
 
+  <ProgressBar
+    android:id="@+id/Progressbar"
+    android:layout_width="230dp"
+    android:layout_height="wrap_content"
+    android:backgroundTint="@color/white"
+    android:indeterminate="true"
+    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"/>
+
   <TextView
     android:id="@+id/pageNameTextView"
     android:layout_width="280dp"

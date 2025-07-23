@@ -81,7 +81,11 @@ class ContactPagesRecyclerAdapter(
 
                 }.setNegativeButton("Delete Page")
                 { dialogInterface, i ->
-                    viewModel.deleteContactPage(pageId, ownerId, context as Activity)
+                    viewModel.deleteContactPage(pageId, ownerId, context as Activity){ onSuccess->
+                        if(onSuccess){
+                            viewModel.fetchMyContactPages(auth.currentUser?.uid.toString(), context)
+                        }
+                    }
                 }
             builder.show()
 

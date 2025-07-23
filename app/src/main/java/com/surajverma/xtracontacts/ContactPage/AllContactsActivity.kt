@@ -43,6 +43,7 @@ class AllContactsActivity : AppCompatActivity() {
         viewModel = ContactPageViewModel()
         arrContacts = ArrayList()
 
+        binding.Progressbar.visibility = View.VISIBLE
         binding.recyclerView.layoutManager= LinearLayoutManager(this)
         binding.recyclerView.setHasFixedSize(true)
         val recyclerAdapter= RecyclerContactAdapter(this, arrContacts, true)
@@ -59,6 +60,7 @@ class AllContactsActivity : AppCompatActivity() {
             arrContacts.clear()
             arrContacts.addAll(sortedList)
             recyclerAdapter.notifyDataSetChanged()
+            binding.Progressbar.visibility = View.GONE
         })
 
 
@@ -91,9 +93,9 @@ class AllContactsActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
         val pageId = intent.getStringExtra("pageId") ?: return
         viewModel.fetchPageContacts(pageId, this)
+
     }
 
 
