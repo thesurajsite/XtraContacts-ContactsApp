@@ -28,9 +28,9 @@
 
 ## 📸 Screenshots
 
-| Login Screen | My Contacts | Contact Pages | Create/Add Contact Pages | Discover Contact Pages |
-|--------------|-------------|---------------|--------------------------|------------------------|
-| <img src="Screenshots/image1.jpg" width="150"/> | <img src="Screenshots/image2.jpg" width="150"/> | <img src="Screenshots/image3.jpg" width="150"/> | <img src="Screenshots/image4.jpg" width="150"/> | <img src="Screenshots/image5.jpg" width="150"/> |
+| My Contacts | All Contact Pages | Inside Contact Pages | Create/Add Contact Pages | Discover Contact Pages |
+|-------------|-------------------|----------------------|--------------------------|------------------------|
+|![My Contacts](./screenshots/image1.jpg) | ![All Contact Pages](./screenshots/image2.jpg) | ![Inside Contact Pages](./screenshots/image3.jpg) | ![Create/Add Contact Pages](./screenshots/image4.jpg) | ![Discover Contact Pages](./screenshots/image5.jpg) |
 
 
 ---
