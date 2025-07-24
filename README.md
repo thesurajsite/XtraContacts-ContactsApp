@@ -30,7 +30,7 @@
 
 | My Contacts | All Contact Pages | Inside Contact Pages | Create/Add Contact Pages | Discover Contact Pages |
 |-------------|-------------------|----------------------|--------------------------|------------------------|
-|![My Contacts](./screenshots/image1.jpg) | ![All Contact Pages](./screenshots/image2.jpg) | ![Inside Contact Pages](./screenshots/image3.jpg) | ![Create/Add Contact Pages](./screenshots/image4.jpg) | ![Discover Contact Pages](./screenshots/image5.jpg) |
+|![My Contacts](./Screenshots/image1.jpg) | ![All Contact Pages](./Screenshots/image2.jpg) | ![Inside Contact Pages](./Screenshots/image3.jpg) | ![Create/Add Contact Pages](./Screenshots/image4.jpg) | ![Discover Contact Pages](./Screenshots/image5.jpg) |
 
 
 ---
