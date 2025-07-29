@@ -10,6 +10,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.firebase.auth.FirebaseAuth
+import com.surajverma.xtracontacts.ContactPage.ContactPageViewModel
 import com.surajverma.xtracontacts.R
 import com.surajverma.xtracontacts.databinding.ActivityDiscoverPageBinding
 
@@ -17,7 +19,9 @@ class DiscoverPageActivity : AppCompatActivity() {
 
   private lateinit var binding: ActivityDiscoverPageBinding
   private lateinit var arrDiscoverPageList: ArrayList<DiscoverPageDataClass>
-  val viewModel : DiscoverPagesViewModel = DiscoverPagesViewModel()
+  val discoverPagesViewModel : DiscoverPagesViewModel = DiscoverPagesViewModel()
+  val contactPageViewModel : ContactPageViewModel = ContactPageViewModel()
+  val userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -25,7 +29,7 @@ class DiscoverPageActivity : AppCompatActivity() {
     setContentView(binding.root)
 
     arrDiscoverPageList = ArrayList<DiscoverPageDataClass>()
-    val recyclerAdapter = DiscoverPageRecyclerAdapter(this, arrDiscoverPageList, viewModel)
+    val recyclerAdapter = DiscoverPageRecyclerAdapter(this, arrDiscoverPageList, discoverPagesViewModel, contactPageViewModel, userId)
     binding.recyclerView.layoutManager = GridLayoutManager(this, 2)
     binding.recyclerView.adapter = recyclerAdapter
 
@@ -39,8 +43,8 @@ class DiscoverPageActivity : AppCompatActivity() {
     recyclerAdapter.notifyDataSetChanged()
 
     binding.Progressbar.visibility=View.VISIBLE
-    viewModel.fetchDiscoverPages(this)
-    viewModel.contactPages.observe(this) { list->
+    discoverPagesViewModel.fetchDiscoverPages(this)
+    discoverPagesViewModel.contactPages.observe(this) { list->
       arrDiscoverPageList.clear()
       arrDiscoverPageList.addAll(list)
       binding.Progressbar.visibility=View.GONE
@@ -58,11 +62,11 @@ class DiscoverPageActivity : AppCompatActivity() {
 
       btnAdd.setOnClickListener {
         val pageId = dialogEditText.text.toString()
-        viewModel.AddPage(pageId, this) { onSuccess->
+        discoverPagesViewModel.AddPage(pageId, this) { onSuccess->
           if(onSuccess){
             alertDialog.dismiss()
             // Fetch Pages to refresh
-            viewModel.fetchDiscoverPages(this)
+            discoverPagesViewModel.fetchDiscoverPages(this)
           }
         }
       }

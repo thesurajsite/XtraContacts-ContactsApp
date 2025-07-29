@@ -23,13 +23,13 @@
       android:layout_marginHorizontal="@dimen/_8sdp"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintBottom_toTopOf="@id/copyPageIDCardView"
+      app:layout_constraintBottom_toTopOf="@id/addPageButton"
       />
 
 
 
     <androidx.cardview.widget.CardView
-      android:id="@+id/copyPageIDCardView"
+      android:id="@+id/addPageButton"
       android:layout_width="match_parent"
       android:layout_height="@dimen/_35sdp"
       android:layout_margin="@dimen/_5sdp"
@@ -40,10 +40,9 @@
       app:layout_constraintBottom_toBottomOf="parent">
 
       <TextView
-        android:id="@+id/copyTextView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Copy Page  ID"
+        android:text="Add Page"
         android:textSize="@dimen/_15sdp"
         android:gravity="center"
         android:textColor="@color/white" />
