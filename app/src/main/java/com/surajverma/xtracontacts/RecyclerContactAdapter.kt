@@ -249,6 +249,8 @@ class RecyclerContactAdapter(
                 shareText = shareText + "LinkedIn: linkedin.com/in/$linkedin"
             }
 
+            shareText = shareText + "\n\nShared via XtraContacts"
+
 
             val shareIntent = Intent(Intent.ACTION_SEND).apply {
                 type = "text/plain"
