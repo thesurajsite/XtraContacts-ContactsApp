@@ -39,7 +39,8 @@ class ContactPagesFragment : Fragment() {
         setupRecyclerView()
         observeContactPages()
 
-        binding.floatingActionButton.setOnClickListener {
+        binding.addButton.playAnimation()
+        binding.addButton.setOnClickListener {
             val intent = Intent(context, CreateContactPageActivity::class.java)
             startActivity(intent)
         }
