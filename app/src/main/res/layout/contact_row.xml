@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:backgroundTint="@color/white"
+    android:backgroundTint="@color/contact_row_background"
     android:id="@+id/cardView"
     app:cardCornerRadius="10dp"
     android:layout_marginTop="5dp"
@@ -13,7 +13,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
         android:layout_marginLeft="10dp"
         android:orientation="horizontal"
         app:cardCornerRadius="3dp">

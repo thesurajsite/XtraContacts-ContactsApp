@@ -34,7 +34,8 @@ class MyContactsFragment : Fragment() {
         setupRecyclerView()
         observeContacts()
 
-        binding.floatingActionButton.setOnClickListener {
+        binding.addButton.playAnimation()
+        binding.addButton.setOnClickListener {
             val intent = Intent(context, AddContactActivity::class.java)
             startActivity(intent)
         }

@@ -117,8 +117,6 @@ class MainActivity : AppCompatActivity() {
         // Bottom Navigation
         binding.bottomNavigation.setSelectedItemId(R.id.MyContacts)
         binding.bottomNavigation.setOnItemSelectedListener { menuItem ->
-            vibrator.vibrate(50)
-
             when (menuItem.itemId) {
                 R.id.MyContacts -> {
                     replaceFragment(myContactsFragment)

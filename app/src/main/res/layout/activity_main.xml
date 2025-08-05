@@ -14,6 +14,7 @@
       android:layout_marginTop="@dimen/_10sdp"
       android:layout_marginStart="@dimen/_16sdp"
       app:cardCornerRadius="25dp"
+      android:backgroundTint="@color/white"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="@id/logo"
       app:layout_constraintBottom_toBottomOf="@id/logo">
@@ -23,7 +24,7 @@
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:scaleType="centerCrop"
-          android:src="@drawable/person"/>
+          android:src="@drawable/person" />
 
     </androidx.cardview.widget.CardView>
 
@@ -55,7 +56,10 @@
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
-      app:menu="@menu/bottom_navigation_menu" />
+      app:menu="@menu/bottom_navigation_menu"
+      app:itemIconTint="@color/bottom_navigation_icon_color"
+      app:itemTextColor="@color/bottom_navigation_icon_color"
+      android:background="@color/bottom_nav_background"/>
 
     <androidx.cardview.widget.CardView
       android:id="@+id/discoverPagesCardView"

@@ -7,4 +7,19 @@
     <color name="color_primary">#FF0d</color>
     <color name="admin_card_color">#FFF59D</color>
     <color name="bottom_navigation_selected_color">#314BDB</color>
+
+
+<!-- Bottom Navigation -->
+    <color name="bottom_nav_selected">#00ff9c</color>
+    <color name="bottom_nav_unselected">#8e8f92</color>
+    <color name="bottom_nav_background">#1e1f22</color>
+
+
+<!-- Progress Bar Color -->
+    <color name="progress_bar_color">#00ff9c</color>
+
+
+<!-- Contact Row Color -->
+    <color name="contact_row_background">#FFFFFF</color>
+
 </resources>
