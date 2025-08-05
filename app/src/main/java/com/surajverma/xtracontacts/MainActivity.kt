@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,8 +24,10 @@ import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
 import com.google.android.play.core.ktx.isImmediateUpdateAllowed
 import com.google.firebase.auth.FirebaseAuth
 import com.surajverma.xtracontacts.Authentication.AuthViewModel
+import com.surajverma.xtracontacts.BulkContacts.BulkContacts
 import com.surajverma.xtracontacts.ContactPage.ContactPageActivity
 import com.surajverma.xtracontacts.ContactPage.ContactPageDetailsModel
+import com.surajverma.xtracontacts.ContactPage.ContactPageViewModel
 import com.surajverma.xtracontacts.Updater.AppUpdater
 import com.surajverma.xtracontacts.databinding.ActivityMainBinding
 import kotlinx.coroutines.delay
@@ -41,6 +44,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var arrContact: ArrayList<ContactsModel>
     private lateinit var vibrator: Vibrator
     private lateinit var appUpdater: AppUpdater
+    private lateinit var contactPageViewModel: ContactPageViewModel
 
     private lateinit var appUpdateManager: AppUpdateManager
     private val updateType= AppUpdateType.FLEXIBLE
@@ -62,7 +66,14 @@ class MainActivity : AppCompatActivity() {
         auth=FirebaseAuth.getInstance()
         authViewModel = ViewModelProvider(this).get(AuthViewModel::class.java)
         contactViewModel= ViewModelProvider(this).get(ContactViewModel::class.java)
+        contactPageViewModel = ViewModelProvider(this)[ContactPageViewModel::class.java]
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+        ///////////////////// Bulk Contact ///////////////////////////
+//        val bulkContacts = BulkContacts()
+//        bulkContacts.AddBulkContacts(this, contactPageViewModel)
+//        Toast.makeText(this, "${user?.uid}", Toast.LENGTH_SHORT).show()
+        //////////////////////////////////////////////////////////////
 
         // Check Login
         authViewModel.checkLogin(this)
@@ -151,4 +162,6 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         appUpdater.unregisterListener()
     }
+
+
 }

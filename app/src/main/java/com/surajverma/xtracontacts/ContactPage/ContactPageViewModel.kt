@@ -338,8 +338,47 @@ class ContactPageViewModel: ViewModel() {
             }
     }
 
+    fun createBulkContacts(userId: String, pageName: String, pageId: String, contactsList: List<ContactsModel>, activity: Activity, onResult: (Boolean) -> Unit) {
+        val db = FirebaseFirestore.getInstance()
+        val updatedContacts = contactsList.map { contact ->
+            ContactsModel(
+                id = db.collection("CONTACT_PAGE").document().id,
+                name = contact.name,
+                number = contact.number,
+                email = contact.email,
+                instagram = contact.instagram,
+                x = contact.x,
+                linkedin = contact.linkedin,
+                pageName = pageName,
+                pageId = pageId,
+                ownerId = userId
+            )
+        }
+
+        val pageData = mapOf(
+            "ContactsList" to updatedContacts,
+            "pageName" to pageName,
+            "pageId" to pageId,
+            "ownerId" to userId,
+            "createdAt" to FieldValue.serverTimestamp()
+        )
+
+        db.collection("CONTACT_PAGE").document(pageId).set(pageData)
+            .addOnSuccessListener {
+                Toast.makeText(activity, "All contacts uploaded", Toast.LENGTH_SHORT).show()
+                onResult(true)
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(activity, "Failed to upload contacts: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                onResult(false)
+            }
+    }
+
+
 
 }
+
+
 
 
 data class ContactPageDetailsModel(
