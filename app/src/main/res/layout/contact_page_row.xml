@@ -9,60 +9,71 @@
   android:layout_marginRight="5dp"
   app:cardCornerRadius="10dp"
   app:cardElevation="2dp"
-  android:backgroundTint="@color/white">
+  android:backgroundTint="@color/contactPage_row_outline">
 
-  <androidx.constraintlayout.widget.ConstraintLayout
+  <androidx.cardview.widget.CardView
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="10dp">
+    android:layout_height="match_parent"
+    app:cardCornerRadius="10dp"
+    android:layout_margin="@dimen/_1sdp"
+    android:backgroundTint="@color/contactPage_row_background">
 
-    <!-- Left image inside circular card -->
-    <androidx.cardview.widget.CardView
-      android:id="@+id/imageCard"
-      android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      app:cardCornerRadius="100dp"
-      android:layout_marginEnd="8dp"
-      app:cardElevation="4dp"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintBottom_toBottomOf="parent">
+      android:padding="5dp">
 
-      <ImageView
-        android:id="@+id/imgContact"
+      <androidx.cardview.widget.CardView
+        android:id="@+id/imageCard"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/contact_page"
-        android:padding="12dp"
-        android:background="@color/black" />
-    </androidx.cardview.widget.CardView>
+        app:cardCornerRadius="100dp"
+        android:layout_marginLeft="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-    <TextView
-      android:id="@+id/pageName"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:text="Page Name"
-      android:textColor="@color/black"
-      android:textSize="20sp"
-      android:layout_marginLeft="@dimen/_10sdp"
-      app:layout_constraintStart_toEndOf="@id/imageCard"
-      app:layout_constraintTop_toTopOf="@id/imageCard"
-      app:layout_constraintBottom_toBottomOf="@id/imageCard"
-      app:layout_constraintEnd_toStartOf="@id/adminImageView" />
+        <ImageView
+          android:id="@+id/imgContact"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:src="@drawable/contact_page"
+          app:tint="@color/black"
+          android:padding="10dp"
+          android:background="@color/contact_row_icon_background"/>
+      </androidx.cardview.widget.CardView>
 
-    <!-- Admin icon fixed to the right -->
-    <ImageView
-      android:id="@+id/adminImageView"
-      android:layout_width="40dp"
-      android:layout_height="40dp"
-      android:src="@drawable/admin"
-      android:visibility="visible"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintTop_toTopOf="@id/imageCard"
-      app:layout_constraintBottom_toBottomOf="@id/imageCard"
-      android:layout_marginStart="8dp"
-      android:layout_marginEnd="4dp" />
+      <TextView
+        android:id="@+id/pageName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Page Name"
+        android:textColor="@color/contactPage_row_text"
+        android:textSize="20sp"
+        android:layout_marginLeft="@dimen/_10sdp"
+        app:layout_constraintStart_toEndOf="@id/imageCard"
+        app:layout_constraintTop_toTopOf="@id/imageCard"
+        app:layout_constraintBottom_toBottomOf="@id/imageCard"
+        app:layout_constraintEnd_toStartOf="@id/adminImageView" />
 
-  </androidx.constraintlayout.widget.ConstraintLayout>
+      <!-- Admin icon fixed to the right -->
+      <ImageView
+        android:id="@+id/adminImageView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/admin"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/imageCard"
+        app:layout_constraintBottom_toBottomOf="@id/imageCard"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="4dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+  </androidx.cardview.widget.CardView>
+
+
 
 </androidx.cardview.widget.CardView>

@@ -20,6 +20,16 @@
 
 
 <!-- Contact Row Color -->
-    <color name="contact_row_background">#FFFFFF</color>
+    <color name="contact_row_background">#1e1f22</color>
+    <color name="contact_row_outline">#8e8f92</color>
+    <color name="contact_row_text">#FFFFFF</color>
+    <color name="contact_row_icon_background">#FFFFFF</color>
+
+
+<!-- Contact Page Row Color -->
+    <color name="contactPage_row_background">#1e1f22</color>
+    <color name="contactPage_row_outline">#8e8f92</color>
+    <color name="contactPage_row_text">#FFFFFF</color>
+    <color name="contactPage_row_icon_background">#FFFFFF</color>
 
 </resources>
