@@ -51,7 +51,8 @@ class DiscoverPageActivity : AppCompatActivity() {
       recyclerAdapter.notifyDataSetChanged()
     }
 
-    binding.floatingActionButton.setOnClickListener {
+    binding.addButton.playAnimation()
+    binding.addButton.setOnClickListener {
       val dialogView = LayoutInflater.from(this).inflate(R.layout.add_discoverpage_dialog, null)
       val dialogBuilder = AlertDialog.Builder(this).setView(dialogView)
       val alertDialog = dialogBuilder.create()
